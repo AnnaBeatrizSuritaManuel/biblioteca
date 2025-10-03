@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bibliotec - Sobre Nós</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Cores principais do site */
+        :root {
+            --global-primary: #50006f;
+            --global-secondary: #000000;
+            --global-background: #9e7ba8;
+            --global-dark: #3c1958;
+            --global-light: #dcb6fa; 
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            --section-bg-light: #9e7ba8;
+        }
+
+        /* Configurações gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Configura o <html> para a cor de fundo */
+        html {
+            height: 100%;
+            background-color: var(--global-background);
+        }
+
+        /*  <body> para o Sticky Footer */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.6;
+            color: var(--global-dark);
+            
+            /* Sticky Footer CSS */
+            min-height: 100%; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            color: var(--global-dark);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--global-primary);
+            transition: color 0.3s;
+        }
+
+        /* AJUSTE 3: Garante que o conteúdo principal (main) ocupe o espaço */
+        main {
+            padding-top: 65px; 
+            flex-grow: 1; 
+        }
+
+        /* Estilo dos botões */
+        .btn-primary {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+            cursor: pointer;
+            background-color: var(--global-primary);
+            color: var(--global-light);
+            border: 2px solid var(--global-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #782090;
+            transform: translateY(-2px);
+        }
+
+        /* Menu de navegação */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 5%;
+            background-color: var(--global-light);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--global-primary);
+        }
+
+        .nav-links a {
+            margin-left: 15px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--global-dark);
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--global-primary);
+        }
+
+        .nav-links a:not(.btn-login):after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--global-primary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover:not(.btn-login):after,
+        .nav-links a.active:not(.btn-login):after {
+            width: 100%;
+        }
+
+        /* Botão de login */
+        .btn-login {
+            background-color: var(--global-primary);
+            color: var(--global-light) !important;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        /* Menu para celular */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-toggle .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 4px auto;
+            background-color: var(--global-dark);
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                width: 100%;
+                background-color: var(--global-light);
+                box-shadow: 0 5px 10px var(--shadow-light);
+                padding: 5px 0;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                margin: 5px 0;
+                padding: 8px 5%;
+                font-size: 1rem;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+                margin-left: 0;
+            }
+
+            .btn-login {
+                margin: 5px auto 10px auto;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            /* Animação do menu biblioteca */
+            .menu-toggle.open .bar:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+            }
+
+            .menu-toggle.open .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.open .bar:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
+            }
+        }
+
+        /* ESTILOS PARA O CARD GIGANTE - about-section */
+        .about-section {
+            /* Card Principal: Centralizado e Arredondado */
+            margin: 40px auto; 
+            max-width: 900px;
+            padding: 60px 5%; 
+            background-color: var(--global-light);
+            border-radius: 20px; /* Bordas arredondadas grandes */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+            text-align: left;
+        }
+
+        .about-section h2 {
+            font-size: 2.5rem;
+            color: var(--global-primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: var(--global-dark);
+        }
+
+        /* Estilo para os cards internos (Sobre o Trabalho e Sobre Mim) */
+        .mission-vision {
+            display: flex;
+            gap: 30px; 
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mission-vision div {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            
+            /* Estilo dos cards internos */
+            background-color: #92659e; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px; /* Bordas arredondadas menores */
+        }
+
+        .mission-vision h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--global-primary);
+        }
+
+        /* Rodapé (Com Flexbox ajustado) */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--global-dark);
+            color: var(--global-light);
+            font-size: 0.9rem;
+            margin-top: auto; /* Empurra o rodapé para a base do <body> */
+            flex-shrink: 0; /* Impede o rodapé de encolher */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">bibliotec</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="categorias.html">Categorias</a>
+            <a href="sobre.html" class="active">Sobre</a>
+            <a href="login.html" class="btn-login">Login</a>
+        </nav>
+        <button class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </header>
+
+    <main>
+        <section class="about-section">
+            <h2>Um Pouco do Site</h2>
+
+            <p>A Bibliotec nasceu da paixão por histórias que mexem com a imaginação, o medo e o mistério. Fundada em 2025, nossa livraria online é dedicada exclusivamente aos gêneros fantasia, suspense e terror, trazendo uma seleção feita especialmente para quem ama se perder em mundos mágicos, sentir o frio na espinha ou desvendar segredos sombrios.</p>
+            
+            <p>Mais do que uma loja, somos um espaço criado para alimentar a curiosidade e o gosto pela leitura. Aqui, você encontra desde clássicos consagrados até os lançamentos mais aguardados, sempre com foco na qualidade e no poder que uma boa história tem de transformar o leitor. Seja para fugir da realidade ou encará-la de um jeito diferente, a Bibliotec é o seu portal para experiências literárias intensas.</p>
+
+            <div class="mission-vision">
+                <div>
+                    <h3>Sobre o Trabalho</h3>
+                    <p>Este site é um trabalho da disciplina SW, feito para aprendermos a criar um sistema de login usando PHP. Ele funciona como uma livraria simples, focada nos gêneros terror, suspense e fantasia, unindo a prática de programação com um projeto literário.</p>
+                </div>
+                <div>
+                    <h3>Sobre Mim</h3>
+                    <p>Meu nome é Anna Beatriz. Tenho 17 anos e estudo na ETEC onde estou fazendo quase dois anos. Gosto de ler, jogar, assistir e aprender coisas novas.</p>
+                </div>
+            </div>
+
+            <p style="margin-top: 40px; text-align: center;">Junte-se a nós e venha ver os livros que temos disponíveis</p>
+            <p style="text-align: center;"><a href="categorias.html" class="btn-primary">Conhecer o Catálogo</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Menu para celular
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            this.classList.toggle('open');
+            navLinks.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
