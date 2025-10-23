@@ -4,21 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bibliotec - Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Cores principais - #8C2C2C como primária e #361A1A como secundária */
         :root {
-            --global-primary: #8C2C2C;
-            --global-secondary: #361A1A;
-            --global-accent: #8C2C2C;
-            --global-light: #E6CECE;
-            --global-background: #F5F5F5;
-            --global-dark: #2C1818;
-            --shadow-light: rgba(140, 44, 44, 0.1);
+            --primary-dark: #1a1a1a;
+            --primary-main: #2C3E50;
+            --primary-light: #34495E;
+            --secondary-dark: #465c78;
+            --secondary-main: #7f8c8d;
+            --secondary-light: #95a5a6;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-muted: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: rgba(44, 62, 80, 0.1);
+            --shadow-hover: rgba(44, 62, 80, 0.2);
         }
 
-        /* Configurações gerais */
         * {
             margin: 0;
             padding: 0;
@@ -26,336 +32,299 @@
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            background-color: var(--global-background);
-            color: var(--global-dark);
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-weight: 400;
         }
 
-        h1, h2, h3 {
-            font-weight: 700;
-            color: var(--global-primary);
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        a {
-            text-decoration: none;
-            color: var(--global-primary);
-            transition: color 0.3s;
-        }
-
-        /* Espaço para o menu fixo */
         main {
+            flex: 1;
             padding-top: 80px;
-            min-height: calc(100vh - 80px - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Estilo dos botões */
-        .btn-primary {
-            display: inline-block;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
             cursor: pointer;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            border: 2px solid var(--global-primary);
-            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-main);
+            color: white;
         }
 
         .btn-primary:hover {
-            background-color: #7a2626;
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(140, 44, 44, 0.3);
+            box-shadow: 0 4px 12px var(--shadow-hover);
         }
 
-        /* Menu de navegação */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background-color: var(--global-light);
-            box-shadow: 0 2px 20px var(--shadow-light);
             position: fixed;
             top: 0;
             width: 100%;
+            background-color: var(--surface);
+            box-shadow: 0 2px 12px var(--shadow);
             z-index: 1000;
-            border-bottom: 3px solid var(--global-primary);
+            padding: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--global-primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
         }
 
         .logo-icon {
-            color: var(--global-secondary);
-            font-size: 2rem;
+            color: var(--primary-main);
+            font-size: 1.75rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .nav-links a {
-            margin-left: 20px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--global-dark);
-            padding: 8px 0;
+            color: var(--text-primary);
+            font-weight: 500;
             position: relative;
+            padding: 8px 0;
         }
 
-        .nav-links a.active, .nav-links a:hover {
-            color: var(--global-primary);
+        .nav-links a.active {
+            color: var(--primary-main);
         }
 
-        .nav-links a:not(.btn-login):after {
+        .nav-links a.active::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 3px;
-            background: var(--global-primary);
-            bottom: -5px;
+            bottom: 0;
             left: 0;
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover:not(.btn-login):after,
-        .nav-links a.active:not(.btn-login):after {
             width: 100%;
+            height: 2px;
+            background-color: var(--primary-main);
         }
 
-        /* Botão de login no menu */
-        .btn-login {
-            background-color: var(--global-primary);
-            color: var(--global-light) !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            margin-left: 20px;
-            text-decoration: none;
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
         }
 
-        .btn-login.active {
-            box-shadow: 0 0 10px rgba(140, 44, 44, 0.5);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-main);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
         }
 
-        .btn-login:hover {
-            background-color: var(--global-secondary);
-            transform: translateY(-2px);
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
         }
 
-        /* Menu para celular */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .menu-toggle .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            margin: 4px auto;
-            background-color: var(--global-dark);
-            transition: all 0.3s ease-in-out;
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background-color: var(--global-light);
-                box-shadow: 0 5px 20px var(--shadow-light);
-                padding: 10px 0;
             }
 
-            .nav-links.open {
-                display: flex;
-            }
-
-            .nav-links a {
-                margin: 8px 0;
-                padding: 12px 5%;
-                font-size: 1.1rem;
-                text-align: center;
-                border-bottom: 1px solid rgba(140, 44, 44, 0.1);
-                margin-left: 0;
-            }
-
-            .btn-login {
-                margin: 10px auto;
-                width: 80%;
-            }
-
-            .menu-toggle {
+            .mobile-menu-btn {
                 display: block;
             }
 
-            /* Animação do menu */
-            .menu-toggle.open .bar:nth-child(1) {
-                transform: translateY(7px) rotate(45deg);
+            .login-container {
+                padding: 1rem;
             }
 
-            .menu-toggle.open .bar:nth-child(2) {
-                opacity: 0;
+            .login-card {
+                padding: 2rem;
             }
-
-            .menu-toggle.open .bar:nth-child(3) {
-                transform: translateY(-7px) rotate(-45deg);
-            }
-        }
-
-        /* Área de login */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - 80px - 60px);
-            padding: 40px 20px;
-        }
-
-        .login-box {
-            background: var(--global-light);
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(140, 44, 44, 0.1);
-            border: 3px solid var(--global-primary);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-        }
-
-        .login-box h2 {
-            margin-bottom: 35px;
-            color: var(--global-primary);
-            font-size: 2.2rem;
-        }
-
-        .login-box label {
-            display: block;
-            text-align: left;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--global-primary);
-        }
-
-        .login-box input[type="text"],
-        .login-box input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 2px solid #d4b8b8;
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-
-        .login-box input[type="text"]:focus,
-        .login-box input[type="password"]:focus {
-            border-color: var(--global-primary);
-            outline: none;
-            box-shadow: 0 0 8px rgba(140, 44, 44, 0.3);
-        }
-
-        .login-box .btn-primary {
-            width: 100%;
-            margin-top: 15px;
-            padding: 15px;
-            font-size: 1.1rem;
-        }
-
-        /* Rodapé */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            font-size: 0.95rem;
         }
     </style>
 </head>
-
 <body>
-
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-icon">📚</span>
-            bibliotec
-        </div>
-        <nav class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="categorias.php">Categorias</a>
-            <a href="sobre.php">Sobre</a>
-            <a href="login.php" class="btn-login active">Login</a>
-        </nav>
-        <button class="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-    </header>
-
-    <main>
-        <div class="login-container">
-            <div class="login-box">
-                <h2>Acesso à Sua Conta</h2>
-                <form id="loginForm" method="POST">
-                    <label for="username">E-mail</label>
-                    <input type="text" id="username" name="username" required>
+    <div class="app-container">
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="index.php" class="logo">
+                    <span class="logo-icon">📚</span>
+                    bibliotec
+                </a>
                 
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="password" required>
+                <nav class="nav-links">
+                    <a href="index.php">Início</a>
+                    <a href="categorias.php">Categorias</a>
+                    <a href="sobre.php">Sobre</a>
+                    <a href="login.php" class="active btn btn-secondary">Entrar</a>
+                </nav>
                 
-                    <button type="button" id="loginButton" class="btn-primary">Entrar</button>
-                </form>
+                <button class="btn btn-ghost mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-        </div>
-    </main>
+        </header>
 
-    <footer>
-        <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
-    </footer>
+        <main>
+            <div class="container">
+                <div class="login-container">
+                    <div class="login-card">
+                        <div class="login-header">
+                            <h2 class="login-title">Acesse sua conta</h2>
+                            <p class="login-subtitle">Entre para explorar nossa biblioteca</p>
+                        </div>
+                        
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+                            </div>
+                            
+                            <button type="button" id="loginButton" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Entrar
+                            </button>
+                        </form>
+                        
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                                Não tem uma conta? <a href="#" style="color: var(--primary-main);">Cadastre-se</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-bottom">
+                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <script>
-        // Menu para celular
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            this.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
-
-        // Login sem enviar formulário
         document.getElementById('loginButton').addEventListener('click', function() {
-            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            // Validação básica
-            if (!username || !password) {
+            if (!email || !password) {
                 alert('Por favor, preencha todos os campos.');
                 return;
             }
             
-            // Redirecionar para a página logado.php
+            // Simulação de login - redireciona para a página de sucesso
             window.location.href = 'logado.php';
         });
 
-        // Permitir enviar com Enter (sem usar submit do formulário)
         document.getElementById('password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('loginButton').click();
             }
+        });
+
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
     </script>
 </body>

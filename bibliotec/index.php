@@ -3,739 +3,654 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Sua Biblioteca Online</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
-   
+    <title>bibliotec - Biblioteca Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Cores principais - #8C2C2C como primária e #361A1A como secundária */
+        /* Paleta de cores baseada na imagem - tons de cinza e azul escuro */
         :root {
-            --global-primary: #8C2C2C;
-            --global-secondary: #361A1A;
-            --global-accent: #8C2C2C;
-            --global-light: #E6CECE;
-            --global-background: #F5F5F5;
-            --global-dark: #2C1818;
-            --shadow-light: rgba(140, 44, 44, 0.1);
-            --hero-background: linear-gradient(135deg, #8C2C2C 0%, #361A1A 100%);
-            --card-bg-light: #FFFFFF;
-            --card-bg-medium: #F8F8F8;
+            --primary-dark: #1a1a1a;
+            --primary-main: #2C3E50;
+            --primary-light: #34495E;
+            --secondary-dark: #465c78;
+            --secondary-main: #7f8c8d;
+            --secondary-light: #95a5a6;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-muted: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: rgba(44, 62, 80, 0.1);
+            --shadow-hover: rgba(44, 62, 80, 0.2);
+            --success: #27ae60;
+            --error: #e74c3c;
         }
- 
-        /* Configurações gerais */
+
+        /* Reset e configurações gerais */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
- 
+
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            background-color: var(--global-background);
-            color: var(--global-dark);
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-weight: 400;
         }
- 
-        h1, h2, h3 {
-            font-weight: 700;
-            color: var(--global-primary);
+
+        /* Layout */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
- 
+
+        main {
+            flex: 1;
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Tipografia */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--primary-dark);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+
+        p { margin-bottom: 1rem; }
+
         a {
             text-decoration: none;
-            color: var(--global-primary);
-            transition: color 0.3s;
+            color: var(--primary-main);
+            transition: color 0.3s ease;
         }
- 
-        /* menu fixo */
-        main {
-            padding-top: 80px;
-            min-height: calc(100vh - 80px - 60px);
+
+        a:hover {
+            color: var(--primary-dark);
         }
- 
-        .section-content {
-            padding: 60px 5%;
-            text-align: center;
-            background-color: var(--global-background);
-        }
- 
-        .section-content h2 {
-            margin-bottom: 40px;
-            font-size: 2rem;
-            color: var(--global-primary);
-        }
- 
-        /* Estilo dos botões */
-        .btn-primary, .btn-secondary {
-            display: inline-block;
+
+        /* Componentes */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
             cursor: pointer;
+            transition: all 0.3s ease;
             border: none;
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Inter', sans-serif;
+            gap: 8px;
         }
- 
+
         .btn-primary {
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            border: 2px solid var(--global-primary);
+            background-color: var(--primary-main);
+            color: white;
         }
- 
+
         .btn-primary:hover {
-            background-color: #7a2626;
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(140, 44, 44, 0.3);
+            box-shadow: 0 4px 12px var(--shadow-hover);
         }
- 
+
         .btn-secondary {
             background-color: transparent;
-            color: var(--global-primary);
-            border: 2px solid var(--global-primary);
+            color: var(--primary-main);
+            border: 1px solid var(--border);
         }
- 
+
         .btn-secondary:hover {
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            transform: translateY(-2px);
+            background-color: var(--background);
+            border-color: var(--primary-main);
         }
- 
-        /* Menu de navegação */
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-ghost:hover {
+            background-color: var(--background);
+        }
+
+        /* Navegação */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background-color: var(--global-light);
-            box-shadow: 0 2px 20px var(--shadow-light);
             position: fixed;
             top: 0;
             width: 100%;
+            background-color: var(--surface);
+            box-shadow: 0 2px 12px var(--shadow);
             z-index: 1000;
-            border-bottom: 3px solid var(--global-primary);
+            padding: 0;
         }
- 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--global-primary);
+
+        .nav-container {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-        }
- 
-        .logo-icon {
-            color: var(--global-secondary);
-            font-size: 2rem;
-        }
- 
-        .nav-links a {
-            margin-left: 20px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--global-dark);
-            padding: 8px 0;
-            position: relative;
-        }
- 
-        .nav-links a.active, .nav-links a:hover {
-            color: var(--global-primary);
-        }
- 
-        .nav-links a:not(.btn-login):after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            background: var(--global-primary);
-            bottom: -5px;
-            left: 0;
-            transition: width 0.3s;
-        }
- 
-        .nav-links a:hover:not(.btn-login):after,
-        .nav-links a.active:not(.btn-login):after {
-            width: 100%;
-        }
- 
-        .btn-login {
-            background-color: var(--global-primary);
-            color: var(--global-light) !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            margin-left: 20px;
-            transition: all 0.3s ease;
-        }
- 
-        .btn-login:hover {
-            background-color: var(--global-secondary);
-            transform: translateY(-2px);
-        }
- 
-        /* Menu para celular */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
- 
-        .menu-toggle .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            margin: 4px auto;
-            background-color: var(--global-dark);
-            transition: all 0.3s ease-in-out;
-        }
- 
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background-color: var(--global-light);
-                box-shadow: 0 5px 20px var(--shadow-light);
-                padding: 10px 0;
-            }
- 
-            .nav-links.open {
-                display: flex;
-            }
- 
-            .nav-links a {
-                margin: 8px 0;
-                padding: 12px 5%;
-                font-size: 1.1rem;
-                text-align: center;
-                border-bottom: 1px solid rgba(140, 44, 44, 0.1);
-                margin-left: 0;
-            }
- 
-            .btn-login {
-                margin: 10px auto;
-                width: 80%;
-            }
- 
-            .menu-toggle {
-                display: block;
-            }
- 
-            /* Animação do menu */
-            .menu-toggle.open .bar:nth-child(1) {
-                transform: translateY(7px) rotate(45deg);
-            }
- 
-            .menu-toggle.open .bar:nth-child(2) {
-                opacity: 0;
-            }
- 
-            .menu-toggle.open .bar:nth-child(3) {
-                transform: translateY(-7px) rotate(-45deg);
-            }
-        }
- 
-        /* Grid de cards */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            padding: 1rem 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
- 
-        .book-card, .category-card {
-            background: var(--card-bg-light);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px var(--shadow-light);
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
- 
-        .book-card:hover, .category-card:hover {
-            box-shadow: 0 8px 25px rgba(140, 44, 44, 0.2);
-            transform: translateY(-5px);
-            border-color: var(--global-primary);
-        }
- 
-        .book-card img, .carousel-card img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 2px solid var(--global-light);
-        }
- 
-        /* Seção principal */
-        .hero-section {
-            padding: 100px 5%;
-            background: var(--hero-background);
+
+        .logo {
             display: flex;
-            gap: 50px;
             align-items: center;
-            flex-wrap: wrap;
-            color: white;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
         }
- 
-        .hero-content {
-            flex: 1 1 40%;
-            min-width: 300px;
+
+        .logo-icon {
+            color: var(--primary-main);
+            font-size: 1.75rem;
         }
- 
-        .hero-content h1 {
-            font-size: 3.2rem;
-            margin-bottom: 20px;
-            line-height: 1.1;
-            color: white;
-        }
- 
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.9);
-        }
- 
-        /* Carrossel 3D */
-        .carousel-container {
-            flex: 1 1 50%;
-            perspective: 1000px;
+
+        .nav-links {
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 350px;
-            overflow: hidden;
-            position: relative;
+            gap: 2rem;
         }
- 
-        .carousel-group {
-            width: 220px;
-            height: 100%;
+
+        .nav-links a {
+            color: var(--text-primary);
+            font-weight: 500;
             position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s ease-in-out;
+            padding: 8px 0;
         }
- 
-        .carousel-card {
-            background: var(--card-bg-light);
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            border: 2px solid var(--global-light);
+
+        .nav-links a.active {
+            color: var(--primary-main);
+        }
+
+        .nav-links a.active::after {
+            content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
+            bottom: 0;
             left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-main);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-main);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
- 
-        /* Posicionamento 3D dos cards */
-        .carousel-group .carousel-card:nth-child(1) {
-            transform: rotateY(0deg) translateZ(300px);
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow-hover);
         }
- 
-        .carousel-group .carousel-card:nth-child(2) {
-            transform: rotateY(120deg) translateZ(300px);
-        }
- 
-        .carousel-group .carousel-card:nth-child(3) {
-            transform: rotateY(240deg) translateZ(300px);
-        }
- 
-        .carousel-card img {
+
+        .card-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 2px solid var(--global-light);
         }
- 
-        /* Efeitos do carrossel */
-        .carousel-card:hover {
-            transform: scale(1.05) translateZ(320px);
-            box-shadow: 0 15px 35px rgba(140, 44, 44, 0.3);
+
+        .card-body {
+            padding: 1.5rem;
         }
- 
-        /* Botões de navegação do carrossel */
-        .carousel-nav {
-            position: absolute;
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Grids */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+        /* Seções */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-main) 100%);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
             width: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: space-between;
-            z-index: 10;
-            padding: 0 15px;
-        }
- 
-        .carousel-nav button {
-            background: var(--global-primary);
-            color: var(--global-light);
-            border: none;
             padding: 12px 16px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            line-height: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
- 
-        .carousel-nav button:hover {
-            background: var(--global-secondary);
-            transform: scale(1.1);
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-main);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
         }
- 
-        @media (max-width: 992px) {
-            .hero-section {
-                flex-direction: column;
-                text-align: center;
-                padding: 80px 5%;
-            }
- 
-            .hero-content {
-                order: 2;
-                margin-top: 40px;
-            }
- 
-            .carousel-container {
-                order: 1;
-                height: 300px;
-            }
-        }
- 
-        /* Janelas pop-up */
+
+        /* Modal */
         .modal {
+            display: none;
             position: fixed;
             top: 0;
-            right: 0;
-            bottom: 0;
             left: 0;
-            background: rgba(54, 26, 26, 0.9);
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-            display: flex;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: between;
             align-items: center;
         }
- 
-        .modal:target {
-            opacity: 1;
-            pointer-events: auto;
-        }
- 
-        .modal-content {
-            background: var(--global-light);
-            padding: 40px;
-            border-radius: 20px;
-            position: relative;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s ease-in-out;
-        }
- 
-        .modal:target .modal-content {
-            transform: scale(1);
-        }
- 
-        .modal-body {
-            display: flex;
-            gap: 30px;
-            text-align: left;
-        }
- 
-        .modal-body img {
-            width: 180px;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 10px;
-            flex-shrink: 0;
-            border: 3px solid var(--global-primary);
-        }
- 
-        .modal-text h3 {
-            font-size: 1.8rem;
-            color: var(--global-primary);
-            margin-bottom: 10px;
-        }
- 
-        .modal-text h4 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--global-secondary);
-            margin-bottom: 20px;
-        }
- 
-        .modal-text p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
- 
-        /* Botão para fechar pop-up */
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: var(--global-secondary);
-            font-size: 2rem;
-            font-weight: 300;
-            line-height: 1;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
- 
-        .modal-close:hover {
-            color: var(--global-primary);
-        }
- 
-        @media (max-width: 600px) {
-            .modal-body {
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-            }
-            
-            .modal-body img {
-                width: 150px;
-                height: 200px;
-            }
-        }
- 
-        /* Rodapé */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            font-size: 0.95rem;
-        }
-        
-        footer p {
+
+        .modal-title {
             margin: 0;
         }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Utilitários */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .p-1 { padding: 0.5rem; }
+        .p-2 { padding: 1rem; }
+        .p-3 { padding: 1.5rem; }
+        .p-4 { padding: 2rem; }
     </style>
 </head>
- 
 <body>
- 
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-icon">📚</span>
-            bibliotec
-        </div>
-        <nav class="nav-links">
-            <a href="index.php" class="active">Home</a>
-            <a href="categorias.php">Categorias</a>
-            <a href="sobre.php">Sobre</a>
-            <a href="login.php" class="btn-login">Login</a>
-        </nav>
-        <button class="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-    </header>
- 
-    <main>
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1>Suas aventuras literárias começam aqui</h1>
-                <p>Descubra mundos incríveis através dos melhores livros de terror, suspense e fantasia.</p>
-                <a href="categorias.php" class="btn-primary">Explorar Categorias</a>
+    <div class="app-container">
+        <!-- Navegação -->
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="index.php" class="logo">
+                    <span class="logo-icon">📚</span>
+                    bibliotec
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="index.php" class="active">Início</a>
+                    <a href="categorias.php">Categorias</a>
+                    <a href="sobre.php">Sobre</a>
+                    <a href="login.php" class="btn btn-secondary">Entrar</a>
+                </nav>
+                
+                <button class="btn btn-ghost mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
- 
-            <div class="carousel-container">
-                <div class="carousel-nav">
-                    <button class="prev-btn">&leftarrow;</button>
-                    <button class="next-btn">&rightarrow;</button>
-                </div>
- 
-                <div class="carousel-group">
-                    <a href="#carousel-modal" class="carousel-card" data-title="O Pequeno Príncipe"
-                        data-author="Antoine de Saint-Exupéry | Páginas: 96" data-image="img/pequeno principe.png"
-                        data-sinopse="Uma das obras literárias mais vendidas de todos os tempos. A história de um piloto que cai no deserto do Saara e encontra um pequeno príncipe de outro planeta, explorando temas como amizade, amor e perda.">
-                        <img src="img/pequeno principe.png" alt="O Pequeno Príncipe">
-                        <h3>O Pequeno Príncipe</h3>
-                    </a>
- 
-                    <a href="#carousel-modal" class="carousel-card" data-title="1984" data-author="George Orwell | Páginas: 416"
-                        data-image="img/1984.png"
-                        data-sinopse="Um clássico da literatura distópica, descrevendo um futuro totalitário onde o Estado controla até o pensamento dos cidadãos. É uma poderosa reflexão sobre liberdade, vigilância e poder.">
-                        <img src="img/1984.png" alt="1984">
-                        <h3>1984</h3>
-                    </a>
- 
-                    <a href="#carousel-modal" class="carousel-card" data-title="O Código Da Vinci"
-                        data-author="Dan Brown | Páginas: 432" data-image="img/codigo da vinte.png"
-                        data-sinopse="Um thriller intrigante que combina arte, história e conspiração. O professor Robert Langdon investiga um assassinato no Louvre, mergulhando em segredos ligados à história da humanidade e à religião.">
-                        <img src="img/codigo da vinte.png" alt="O Código Da Vinci">
-                        <h3>O Código Da Vinci</h3>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main>
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <h1 class="hero-title">Descubra Mundos Extraordinários</h1>
+                    <p class="hero-subtitle">Explore nossa coleção curada de livros de terror, suspense e fantasia. Histórias que vão te transportar para universos inesquecíveis.</p>
+                    <a href="categorias.php" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Explorar Catálogo
                     </a>
                 </div>
+            </section>
+
+            <!-- Livros em Destaque -->
+            <section class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Livros em Destaque</h2>
+                        <p class="section-subtitle">Seleção especial dos nossos títulos mais populares</p>
+                    </div>
+                    
+                    <div class="grid grid-3">
+                        <!-- Card de Livro 1 -->
+                        <div class="card">
+                            <img src="img/o_exorcista.jpg" alt="O Exorcista" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">O Exorcista</h3>
+                                <p class="card-text">William Peter Blatty</p>
+                                <p class="card-text">Terror • 1971</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal(1)">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card de Livro 2 -->
+                        <div class="card">
+                            <img src="img/a_garota_no_trem.jpg" alt="A Garota no Trem" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">A Garota no Trem</h3>
+                                <p class="card-text">Paula Hawkins</p>
+                                <p class="card-text">Suspense • 2015</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal(2)">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card de Livro 3 -->
+                        <div class="card">
+                            <img src="img/senhor_dos_aneis.jpg" alt="O Senhor dos Anéis" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">O Senhor dos Anéis</h3>
+                                <p class="card-text">J.R.R. Tolkien</p>
+                                <p class="card-text">Fantasia • 1954</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal(3)">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>bibliotec</h4>
+                        <p>Sua biblioteca digital de terror, suspense e fantasia.</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Links Rápidos</h4>
+                        <a href="index.php">Início</a>
+                        <a href="categorias.php">Categorias</a>
+                        <a href="sobre.php">Sobre</a>
+                        <a href="login.php">Login</a>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Contato</h4>
+                        <a href="mailto:contato@bibliotec.com">contato@bibliotec.com</a>
+                        <a href="tel:+551199999999">(11) 9999-9999</a>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+                </div>
             </div>
-        </section>
- 
-        <section class="section-content">
-            <h2>Mais procurados desta semana</h2>
-            <div class="cards-grid">
-                <div class="book-card book-card-click">
-                    <img src="img/nunca minta.png" alt="Livro Nunca Minta">
-                    <h3>Nunca Minta</h3>
-                    <p class="genre">Suspense</p>
-                    <a href="#modal-labirinto" class="btn-secondary">Saiba Mais</a>
-                </div>
-                <div class="book-card book-card-click">
-                    <img src="img/jogo dos deuses.png" alt="Os Jogos dos Deuses">
-                    <h3>Os Jogos dos Deuses</h3>
-                    <p class="genre">Fantasia</p>
-                    <a href="#modal-reino" class="btn-secondary">Saiba Mais</a>
-                </div>
-                <div class="book-card book-card-click">
-                    <img src="img/o paciente.png" alt="O Paciente">
-                    <h3>O Paciente</h3>
-                    <p class="genre">Terror Psicológico</p>
-                    <a href="#modal-casa" class="btn-secondary">Saiba Mais</a>
-                </div>
-            </div>
-        </section>
-    </main>
- 
-    <div id="carousel-modal" class="modal">
+        </footer>
+    </div>
+
+    <!-- Modal de Detalhes do Livro -->
+    <div id="bookModal" class="modal">
         <div class="modal-content">
-            <a href="#close" class="modal-close">&times;</a>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalBookTitle">Detalhes do Livro</h3>
+                <button class="modal-close" onclick="closeBookModal()">&times;</button>
+            </div>
             <div class="modal-body">
-                <img id="modal-img" src="" alt="Capa do Livro">
-                <div class="modal-text">
-                    <h3 id="modal-title"></h3>
-                    <h4 id="modal-author"></h4>
-                    <p id="modal-sinopse"></p>
-                    <a href="#close" class="btn-primary">Fechar</a>
+                <div id="modalBookContent">
+                    <!-- Conteúdo carregado via JavaScript -->
                 </div>
             </div>
         </div>
     </div>
- 
-    <div id="modal-labirinto" class="modal">
-        <div class="modal-content">
-            <a href="#close" class="modal-close">&times;</a>
-            <div class="modal-body">
-                <img src="img/nunca minta.png" alt="Capa Nunca Minta">
-                <div class="modal-text">
-                    <h3>Nunca Minta</h3>
-                    <h4>Autor: Freida McFadden | Páginas: 368</h4>
-                    <p>Sinopse: Neste thriller psicológico, um casal isolado em uma casa remota começa a descobrir segredos perturbadores sobre o desaparecimento de uma jovem. A trama é repleta de reviravoltas e tensão, mantendo os leitores intrigados até a última página.</p>
-                    <a href="#close" class="btn-primary">Fechar</a>
-                </div>
-            </div>
-        </div>
-    </div>
- 
-    <div id="modal-reino" class="modal">
-        <div class="modal-content">
-            <a href="#close" class="modal-close">&times;</a>
-            <div class="modal-body">
-                <img src="img/jogo dos deuses.png" alt="Capa Os Jogos dos Deuses">
-                <div class="modal-text">
-                    <h3>Os Jogos dos Deuses</h3>
-                    <h4>Autor: Abigail Owen | Páginas: 480</h4>
-                    <p>Sinopse: Neste romance de fantasia épica, os deuses antigos retornam ao mundo mortal, desencadeando uma série de eventos que desafiam o equilíbrio entre os mundos. A trama mistura mitologia, política e magia, oferecendo uma leitura envolvente para os fãs do gênero.</p>
-                    <a href="#close" class="btn-primary">Fechar</a>
-                </div>
-            </div>
-        </div>
-    </div>
- 
-    <div id="modal-casa" class="modal">
-        <div class="modal-content">
-            <a href="#close" class="modal-close">&times;</a>
-            <div class="modal-body">
-                <img src="img/o paciente.png" alt="Capa O Paciente">
-                <div class="modal-text">
-                    <h3>O Paciente</h3>
-                    <h4>Autor: Jasper DeWitt | Páginas: 320</h4>
-                    <p>Sinopse: O jovem residente de psiquiatria, Dr. Parker, assume o caso de Joe, um paciente que está no hospital desde os 6 anos e vive isolado do mundo por ser considerado uma ameaça. Todos os que tentam tratá-lo se tornam loucos ou tiram a própria vida. O estilo narrativo remete à obra Frankenstein, de Mary Shelley, pois se desenrola através dos relatos do doutor Parker feitos em posts de um blog destinado aos médicos.</p>
-                    <a href="#close" class="btn-primary">Fechar</a>
-                </div>
-            </div>
-        </div>
-    </div>
- 
-    <footer>
-        <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
-    </footer>
- 
+
     <script>
-        // Menu para celular
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            this.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
- 
-        // Carrossel 3D
-        const carouselGroup = document.querySelector('.carousel-group');
-        const prevButton = document.querySelector('.prev-btn');
-        const nextButton = document.querySelector('.next-btn');
-        const cards = document.querySelectorAll('.carousel-group .carousel-card');
-        const totalCards = cards.length;
-        const angle = 360 / totalCards;
-        let rotationY = 0;
- 
-        // Gira o carrossel para esquerda ou direita
-        function rotateCarousel(direction) {
-            if (direction === 'next') {
-                rotationY -= angle;
-            } else if (direction === 'prev') {
-                rotationY += angle;
+        // Funções do Modal
+        function openBookModal(bookId) {
+            // Simulação de dados - em produção, isso viria do banco de dados
+            const books = {
+                1: {
+                    title: "O Exorcista",
+                    author: "William Peter Blatty",
+                    description: "Inspirado em um caso real, o livro conta a história de uma menina possuída por uma entidade demoníaca e dos esforços de dois padres para realizar um exorcismo. É uma narrativa intensa, explorando medo, fé e possessão.",
+                    genre: "Terror Sobrenatural",
+                    year: "1971",
+                    price: "R$ 39,90"
+                },
+                2: {
+                    title: "A Garota no Trem",
+                    author: "Paula Hawkins",
+                    description: "Rachel pega o trem todos os dias passando por casas e observa um casal aparentemente perfeito. Quando a mulher desaparece, ela se envolve numa trama complexa de mentiras, memória e perigo.",
+                    genre: "Suspense Psicológico",
+                    year: "2015",
+                    price: "R$ 34,90"
+                },
+                3: {
+                    title: "O Senhor dos Anéis",
+                    author: "J.R.R. Tolkien",
+                    description: "Uma das obras mais influentes da fantasia. Conta a jornada de Frodo Bolseiro para destruir o Um Anel, enfrentando perigos e batalhas numa terra mágica chamada Terra Média.",
+                    genre: "Fantasia Épica",
+                    year: "1954",
+                    price: "R$ 59,90"
+                }
+            };
+            
+            const book = books[bookId];
+            if (book) {
+                document.getElementById('modalBookTitle').textContent = book.title;
+                document.getElementById('modalBookContent').innerHTML = `
+                    <div class="grid grid-2">
+                        <div>
+                            <img src="img/${book.title.toLowerCase().replace(/ /g, '_')}.jpg" alt="${book.title}" style="width: 100%; border-radius: 8px;">
+                        </div>
+                        <div>
+                            <h4>${book.title}</h4>
+                            <p><strong>Autor:</strong> ${book.author}</p>
+                            <p><strong>Gênero:</strong> ${book.genre}</p>
+                            <p><strong>Ano:</strong> ${book.year}</p>
+                            <p><strong>Preço:</strong> ${book.price}</p>
+                            <p class="mt-3">${book.description}</p>
+                            <div class="mt-3">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('bookModal').classList.add('active');
             }
-           
-            carouselGroup.style.transform = `translateZ(-300px) rotateY(${rotationY}deg)`;
         }
- 
-        // Botões para girar o carrossel
-        nextButton.addEventListener('click', () => rotateCarousel('next'));
-        prevButton.addEventListener('click', () => rotateCarousel('prev'));
- 
-        // Posição inicial do carrossel
-        carouselGroup.style.transform = `translateZ(-300px) rotateY(0deg)`;
- 
-        // Pop-up do carrossel
-        cards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-               
-                // Pega informações do livro clicado
-                const title = card.getAttribute('data-title');
-                const author = card.getAttribute('data-author');
-                const image = card.getAttribute('data-image');
-                const sinopse = card.getAttribute('data-sinopse');
- 
-                // Coloca as informações no pop-up
-                document.getElementById('modal-title').textContent = title;
-                document.getElementById('modal-author').textContent = author;
-                document.getElementById('modal-img').src = image;
-                document.getElementById('modal-img').alt = `Capa do livro ${title}`;
-                document.getElementById('modal-sinopse').textContent = sinopse;
-               
-                // Mostra o pop-up
-                window.location.hash = 'carousel-modal';
-            });
+
+        function closeBookModal() {
+            document.getElementById('bookModal').classList.remove('active');
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookModal();
+            }
+        });
+
+        // Menu mobile
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
     </script>
 </body>

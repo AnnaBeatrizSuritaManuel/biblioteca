@@ -3,352 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Sobre Nós</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>bibliotec - Sobre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Cores principais - #8C2C2C como primária e #361A1A como secundária */
         :root {
-            --global-primary: #8C2C2C;
-            --global-secondary: #361A1A;
-            --global-accent: #8C2C2C;
-            --global-light: #E6CECE;
-            --global-background: #F5F5F5;
-            --global-dark: #2C1818;
-            --shadow-light: rgba(140, 44, 44, 0.1);
+            --primary-dark: #1a1a1a;
+            --primary-main: #2C3E50;
+            --primary-light: #34495E;
+            --secondary-dark: #465c78;
+            --secondary-main: #7f8c8d;
+            --secondary-light: #95a5a6;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-muted: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: rgba(44, 62, 80, 0.1);
+            --shadow-hover: rgba(44, 62, 80, 0.2);
         }
 
-        /* Configurações gerais */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Configura o <html> para a cor de fundo */
-        html {
-            height: 100%;
-            background-color: var(--global-background);
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-weight: 400;
         }
 
-        /* <body> para o Sticky Footer */
-        body {
-            font-family: 'Quicksand', sans-serif;
-            line-height: 1.6;
-            color: var(--global-dark);
-            
-            /* Sticky Footer CSS */
-            min-height: 100%; 
+        .app-container {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        h1, h2, h3 {
-            font-weight: 700;
-            color: var(--global-primary);
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--global-primary);
-            transition: color 0.3s;
-        }
-
-        /* Garante que o conteúdo principal (main) ocupe o espaço */
         main {
-            padding-top: 80px; 
-            flex-grow: 1; 
+            flex: 1;
+            padding-top: 80px;
         }
 
-        /* Estilo dos botões */
-        .btn-primary {
-            display: inline-block;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
             cursor: pointer;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            border: 2px solid var(--global-primary);
-            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-main);
+            color: white;
         }
 
         .btn-primary:hover {
-            background-color: #7a2626;
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(140, 44, 44, 0.3);
+            box-shadow: 0 4px 12px var(--shadow-hover);
         }
 
-        /* Menu de navegação */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background-color: var(--global-light);
-            box-shadow: 0 2px 20px var(--shadow-light);
             position: fixed;
             top: 0;
             width: 100%;
+            background-color: var(--surface);
+            box-shadow: 0 2px 12px var(--shadow);
             z-index: 1000;
-            border-bottom: 3px solid var(--global-primary);
+            padding: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--global-primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
         }
 
         .logo-icon {
-            color: var(--global-secondary);
-            font-size: 2rem;
+            color: var(--primary-main);
+            font-size: 1.75rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .nav-links a {
-            margin-left: 20px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--global-dark);
-            padding: 8px 0;
+            color: var(--text-primary);
+            font-weight: 500;
             position: relative;
+            padding: 8px 0;
         }
 
-        .nav-links a.active, .nav-links a:hover {
-            color: var(--global-primary);
+        .nav-links a.active {
+            color: var(--primary-main);
         }
 
-        .nav-links a:not(.btn-login):after {
+        .nav-links a.active::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 3px;
-            background: var(--global-primary);
-            bottom: -5px;
+            bottom: 0;
             left: 0;
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover:not(.btn-login):after,
-        .nav-links a.active:not(.btn-login):after {
             width: 100%;
+            height: 2px;
+            background-color: var(--primary-main);
         }
 
-        /* Botão de login */
-        .btn-login {
-            background-color: var(--global-primary);
-            color: var(--global-light) !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            margin-left: 20px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .section {
+            padding: 4rem 0;
         }
 
-        .btn-login:hover {
-            background-color: var(--global-secondary);
-            transform: translateY(-2px);
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-main) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
         }
 
-        /* Menu para celular */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
         }
 
-        .menu-toggle .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            margin: 4px auto;
-            background-color: var(--global-dark);
-            transition: all 0.3s ease-in-out;
+        .about-hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .info-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow);
+            border-left: 4px solid var(--primary-main);
+        }
+
+        .info-card h3 {
+            color: var(--primary-main);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background-color: var(--global-light);
-                box-shadow: 0 5px 20px var(--shadow-light);
-                padding: 10px 0;
             }
 
-            .nav-links.open {
-                display: flex;
-            }
-
-            .nav-links a {
-                margin: 8px 0;
-                padding: 12px 5%;
-                font-size: 1.1rem;
-                text-align: center;
-                border-bottom: 1px solid rgba(140, 44, 44, 0.1);
-                margin-left: 0;
-            }
-
-            .btn-login {
-                margin: 10px auto;
-                width: 80%;
-            }
-
-            .menu-toggle {
+            .mobile-menu-btn {
                 display: block;
             }
 
-            /* Animação do menu */
-            .menu-toggle.open .bar:nth-child(1) {
-                transform: translateY(7px) rotate(45deg);
+            .about-hero h1 {
+                font-size: 2.25rem;
             }
-
-            .menu-toggle.open .bar:nth-child(2) {
-                opacity: 0;
-            }
-
-            .menu-toggle.open .bar:nth-child(3) {
-                transform: translateY(-7px) rotate(-45deg);
-            }
-        }
-
-        /* ESTILOS PARA O CARD GIGANTE - about-section */
-        .about-section {
-            /* Card Principal: Centralizado e Arredondado */
-            margin: 60px auto; 
-            max-width: 1000px;
-            padding: 70px 5%; 
-            background-color: var(--global-light);
-            border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(140, 44, 44, 0.1);
-            text-align: left;
-            border: 3px solid var(--global-primary);
-        }
-
-        .about-section h2 {
-            font-size: 2.8rem;
-            color: var(--global-primary);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .about-section p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: var(--global-dark);
-            line-height: 1.8;
-        }
-
-        /* Estilo para os cards internos (Sobre o Trabalho e Sobre Mim) */
-        .mission-vision {
-            display: flex;
-            gap: 40px; 
-            margin-top: 50px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .mission-vision div {
-            flex: 1;
-            min-width: 320px;
-            padding: 35px;
-            
-            /* Estilo dos cards internos */
-            background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%);
-            box-shadow: 0 8px 25px rgba(140, 44, 44, 0.1);
-            border-radius: 20px;
-            border: 2px solid var(--global-primary);
-        }
-
-        .mission-vision h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--global-primary);
-            text-align: center;
-        }
-
-        .mission-vision p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-        }
-
-        /* Rodapé (Com Flexbox ajustado) */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            font-size: 0.95rem;
-            margin-top: auto; /* Empurra o rodapé para a base do <body> */
-            flex-shrink: 0; /* Impede o rodapé de encolher */
         }
     </style>
 </head>
-
 <body>
+    <div class="app-container">
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="index.php" class="logo">
+                    <span class="logo-icon">📚</span>
+                    bibliotec
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="index.php">Início</a>
+                    <a href="categorias.php">Categorias</a>
+                    <a href="sobre.php" class="active">Sobre</a>
+                    <a href="login.php" class="btn btn-secondary">Entrar</a>
+                </nav>
+                
+                <button class="btn btn-ghost mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
 
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-icon">📚</span>
-            bibliotec
-        </div>
-        <nav class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="categorias.php">Categorias</a>
-            <a href="sobre.php" class="active">Sobre</a>
-            <a href="login.php" class="btn-login">Login</a>
-        </nav>
-        <button class="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-    </header>
-
-    <main>
-        <section class="about-section">
-            <h2>Um Pouco do Site</h2>
-
-            <p>A Bibliotec nasceu da paixão por histórias que mexem com a imaginação, o medo e o mistério. Fundada em 2025, nossa livraria online é dedicada exclusivamente aos gêneros fantasia, suspense e terror, trazendo uma seleção feita especialmente para quem ama se perder em mundos mágicos, sentir o frio na espinha ou desvendar segredos sombrios.</p>
-            
-            <p>Mais do que uma loja, somos um espaço criado para alimentar a curiosidade e o gosto pela leitura. Aqui, você encontra desde clássicos consagrados até os lançamentos mais aguardados, sempre com foco na qualidade e no poder que uma boa história tem de transformar o leitor. Seja para fugir da realidade ou encará-la de um jeito diferente, a Bibliotec é o seu portal para experiências literárias intensas.</p>
-
-            <div class="mission-vision">
-                <div>
-                    <h3>Sobre o Trabalho</h3>
-                    <p>Este site é um trabalho da disciplina SW, feito para aprendermos a criar um sistema de login usando PHP. Ele funciona como uma livraria simples, focada nos gêneros terror, suspense e fantasia, unindo a prática de programação com um projeto literário.</p>
+        <main>
+            <section class="about-hero">
+                <div class="container">
+                    <h1>Sobre a Bibliotec</h1>
+                    <p>Conheça mais sobre nossa missão, história e paixão por literatura</p>
                 </div>
-                <div>
-                    <h3>Sobre Mim</h3>
-                    <p>Meu nome é Anna Beatriz. Tenho 17 anos e estudo na ETEC onde estou fazendo quase dois anos. Gosto de ler, jogar, assistir e aprender coisas novas.</p>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <div class="about-content">
+                        <div class="about-text">
+                            <p>A Bibliotec nasceu da paixão por histórias que mexem com a imaginação, o medo e o mistério. Fundada em 2025, nossa livraria online é dedicada exclusivamente aos gêneros fantasia, suspense e terror, trazendo uma seleção feita especialmente para quem ama se perder em mundos mágicos, sentir o frio na espinha ou desvendar segredos sombrios.</p>
+                            
+                            <p>Mais do que uma loja, somos um espaço criado para alimentar a curiosidade e o gosto pela leitura. Aqui, você encontra desde clássicos consagrados até os lançamentos mais aguardados, sempre com foco na qualidade e no poder que uma boa história tem de transformar o leitor.</p>
+                        </div>
+
+                        <div class="info-cards">
+                            <div class="info-card">
+                                <h3><i class="fas fa-briefcase"></i> Sobre o Trabalho</h3>
+                                <p>Este site é um trabalho da disciplina SW, feito para aprendermos a criar um sistema de login usando PHP. Ele funciona como uma livraria simples, focada nos gêneros terror, suspense e fantasia, unindo a prática de programação com um projeto literário.</p>
+                            </div>
+
+                            <div class="info-card">
+                                <h3><i class="fas fa-user"></i> Sobre Mim</h3>
+                                <p>Meu nome é Anna Beatriz. Tenho 17 anos e estudo na ETEC onde estou fazendo quase dois anos. Gosto de ler, jogar, assistir e aprender coisas novas. A criação deste projeto une minha paixão por tecnologia e literatura.</p>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 3rem;">
+                            <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem;">
+                                Junte-se a nós e venha ver os livros que temos disponíveis
+                            </p>
+                            <a href="categorias.php" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                                Explorar Catálogo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-bottom">
+                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
                 </div>
             </div>
-
-            <p style="margin-top: 50px; text-align: center; font-size: 1.3rem; font-weight: 600;">Junte-se a nós e venha ver os livros que temos disponíveis</p>
-            <p style="text-align: center; margin-top: 20px;"><a href="categorias.php" class="btn-primary" style="padding: 15px 30px; font-size: 1.1rem;">Conhecer o Catálogo</a></p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
-    </footer>
+        </footer>
+    </div>
 
     <script>
-        // Menu para celular
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
-            this.classList.toggle('open');
-            navLinks.classList.toggle('open');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
     </script>
 </body>

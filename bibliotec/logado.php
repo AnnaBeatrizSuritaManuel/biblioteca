@@ -3,172 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Sucesso!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>bibliotec - Login Concluído</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Cores principais - #8C2C2C como primária e #361A1A como secundária */
         :root {
-            --global-primary: #8C2C2C;
-            --global-secondary: #361A1A;
-            --global-accent: #8C2C2C;
-            --global-light: #E6CECE;
-            --global-background: #F5F5F5;
-            --global-dark: #2C1818;
-            --shadow-light: rgba(140, 44, 44, 0.1);
-            --success-color: #8C2C2C;
+            --primary-dark: #1a1a1a;
+            --primary-main: #2C3E50;
+            --primary-light: #34495E;
+            --secondary-dark: #465c78;
+            --secondary-main: #7f8c8d;
+            --secondary-light: #95a5a6;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-muted: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: rgba(44, 62, 80, 0.1);
+            --shadow-hover: rgba(44, 62, 80, 0.2);
+            --success: #27ae60;
         }
 
-        /* Configurações gerais  */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--global-background); 
-            color: var(--global-dark);
-            
-            /* Centraliza o card de sucesso na tela */
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-weight: 400;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            text-align: center;
             padding: 20px;
         }
 
-        /* --- CARD DE SUCESSO --- */
-        .sucesso-container {
-            background-color: var(--global-light);
-            padding: 70px 50px;
-            border-radius: 25px;
-            box-shadow: 0 15px 40px var(--shadow-light);
-            width: 100%;
+        .success-container {
+            text-align: center;
             max-width: 500px;
-            border: 3px solid var(--global-primary);
+            width: 100%;
         }
 
-        /* Círculo do Ícone */
-        .icon-circle {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 100px;
-            height: 100px;
+        .success-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
             border-radius: 50%;
-            background-color: var(--success-color);
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(140, 44, 44, 0.3);
-        }
-
-        /* O Checkmark */
-        .checkmark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
             color: white;
-            font-size: 60px;
-            font-weight: 700;
-            line-height: 1;
+            font-size: 2.5rem;
         }
 
-        /* Título */
-        h1 {
-            color: var(--global-primary);
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            font-weight: 700;
+        .success-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
         }
 
-        /* Parágrafo de instrução */
-        p {
-            color: var(--global-dark);
-            margin-bottom: 40px;
-            line-height: 1.6;
-            font-weight: 400;
+        .success-message {
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
             font-size: 1.1rem;
+            line-height: 1.6;
         }
 
-        /* Contêiner para alinhar os botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-main);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--background);
+            border-color: var(--primary-main);
+        }
+
         .button-group {
             display: flex;
+            gap: 1rem;
             justify-content: center;
-            gap: 20px;
             flex-wrap: wrap;
         }
 
-        /* Botão Primário (Ir para a Tela de Usuário) */
-        .btn-primary-action {
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            
-            background-color: var(--global-primary);
-            color: white;
-            border: 2px solid var(--global-primary);
-            text-decoration: none;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.1rem;
-        }
-
-        .btn-primary-action:hover {
-            background-color: #7a2626;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(140, 44, 44, 0.3);
-        }
-
-        /* Botão Secundário (Voltar para a Home) */
-        .btn-secondary-action {
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            
-            background-color: transparent;
-            color: var(--global-primary);
-            border: 2px solid var(--global-primary);
-            text-decoration: none;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.1rem;
-        }
-
-        .btn-secondary-action:hover {
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            transform: translateY(-3px);
-        }
-
         @media (max-width: 480px) {
-            .sucesso-container {
-                padding: 50px 30px;
+            .success-card {
+                padding: 2rem;
             }
-            
+
             .button-group {
                 flex-direction: column;
-                gap: 15px;
             }
-            
-            .btn-primary-action,
-            .btn-secondary-action {
+
+            .btn {
                 width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sucesso-container">
-        <div class="icon-circle">
-            <span class="checkmark">✓</span>
-        </div>
-        
-        <h1>Login Concluído com Sucesso!</h1>
-        <p>Bem-vindo(a) ao site. Escolha para onde deseja navegar.</p>
-        
-        <div class="button-group">
-            <a href="usuario.php" class="btn-primary-action">Minha Conta</a>
-            <a href="index.php" class="btn-secondary-action">Voltar para a Home</a>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            
+            <h1 class="success-title">Login Concluído!</h1>
+            
+            <p class="success-message">
+                Bem-vinda de volta, Lara! Seu login foi realizado com sucesso. 
+                Agora você pode acessar todos os recursos da sua conta.
+            </p>
+            
+            <div class="button-group">
+                <a href="usuario.php" class="btn btn-primary">
+                    <i class="fas fa-user"></i>
+                    Meu Perfil
+                </a>
+                
+                <a href="index.php" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    Página Inicial
+                </a>
+            </div>
         </div>
     </div>
 </body>

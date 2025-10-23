@@ -3,481 +3,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Livros de Suspense</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>bibliotec - Suspense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Cores principais - #8C2C2C como primária e #361A1A como secundária */
+        /* Mesmo CSS do terror.php */
         :root {
-            --global-primary: #8C2C2C;
-            --global-secondary: #361A1A;
-            --global-accent: #8C2C2C;
-            --global-light: #E6CECE;
-            --global-background: #F8F0F0;
-            --global-dark: #2C1818;
-            --shadow-light: rgba(140, 44, 44, 0.2);
-            --card-bg: #FFFFFF;
-            --modal-bg: rgba(54, 26, 26, 0.95);
-            --modal-content-bg: #FFFFFF;
-            --navbar-bg: #E6CECE;
+            --primary-dark: #1a1a1a;
+            --primary-main: #2C3E50;
+            --primary-light: #34495E;
+            --secondary-dark: #465c78;
+            --secondary-main: #7f8c8d;
+            --secondary-light: #95a5a6;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5d6d7e;
+            --text-muted: #7f8c8d;
+            --border: #e0e0e0;
+            --shadow: rgba(44, 62, 80, 0.1);
+            --shadow-hover: rgba(44, 62, 80, 0.2);
         }
 
-        /* Configurações gerais */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Quicksand', sans-serif; 
-            line-height: 1.6; 
-            background-color: var(--global-background); 
-            color: var(--global-dark); 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1, h2, h3 { 
-            font-weight: 700; 
-            color: var(--global-primary);
-        } 
-        a { text-decoration: none; color: var(--global-primary); transition: color 0.3s; }
-        
-        /* Layout principal */
-        main { 
-            padding-top: 80px; 
-            min-height: calc(100vh - 80px - 60px); 
-            background-color: var(--global-background);
-        } 
 
-        /* Estilo dos botões */
-        .btn-primary, .btn-secondary {
-            display: inline-block; 
-            padding: 12px 24px; 
-            border-radius: 30px; 
-            font-weight: 600; 
-            text-align: center; 
-            transition: all 0.3s ease; 
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-weight: 400;
         }
-        .btn-primary {  
-            background-color: var(--global-primary);  
-            color: var(--global-light);  
-            border: 2px solid var(--global-primary);  
-        }
-        .btn-primary:hover {  
-            background-color: #7a2626; 
-            transform: translateY(-2px);  
-            box-shadow: 0 4px 12px rgba(140, 44, 44, 0.3);
-        }
-        
-        /* Menu de navegação */
-        .navbar {  
-            display: flex;  
-            justify-content: space-between;  
-            align-items: center;  
-            padding: 15px 5%; 
-            background-color: var(--navbar-bg);
-            box-shadow: 0 2px 20px var(--shadow-light);  
-            position: fixed; top: 0; width: 100%; z-index: 1000;  
-            border-bottom: 3px solid var(--global-primary);
-        }
-        .logo {  
-            font-size: 1.8rem; 
-            font-weight: 700;  
-            color: var(--global-primary); 
+
+        .app-container {
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-        }
-        
-        .logo-icon {
-            color: var(--global-secondary);
-            font-size: 2rem;
-        }
-        
-        .nav-links a {  
-            margin-left: 20px; 
-            font-weight: 600;  
-            font-size: 1rem; 
-            color: var(--global-dark); 
-            padding: 8px 0; 
-            position: relative;  
-        }
-        .nav-links a[href="categorias.php"] { color: var(--global-primary); } 
-        .nav-links a.active, .nav-links a:hover { color: var(--global-primary); } 
-        .nav-links a:not(.btn-login):after { 
-            content: ''; 
-            position: absolute; 
-            width: 0; 
-            height: 3px; 
-            background: var(--global-primary); 
-            bottom: -5px; 
-            left: 0; 
-            transition: width 0.3s; 
-        }
-        .nav-links a:hover:not(.btn-login):after,
-        .nav-links a.active:not(.btn-login):after { width: 100%; }
-        
-        .btn-login {  
-            background-color: var(--global-primary);  
-            color: var(--global-light) !important;  
-            padding: 8px 20px;  
-            border-radius: 25px;  
-            margin-left: 20px;  
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background-color: var(--global-secondary);
-            transform: translateY(-2px);
-        }
-
-        /* Menu para celular */
-        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
-        .menu-toggle .bar { display: block; width: 25px; height: 3px; margin: 4px auto; background-color: var(--global-dark);  transition: all 0.3s ease-in-out; }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none; 
-                flex-direction: column; 
-                position: absolute; 
-                top: 70px; 
-                left: 0; 
-                width: 100%;
-                background-color: var(--navbar-bg); 
-                box-shadow: 0 5px 20px var(--shadow-light); 
-                padding: 10px 0;
-            }
-            .nav-links.open { display: flex; }
-            .nav-links a { margin: 8px 0; padding: 12px 5%; font-size: 1.1rem; text-align: center; border-bottom: 1px solid rgba(140, 44, 44, 0.1); margin-left: 0; }
-            .btn-login { margin: 10px auto; width: 80%; }
-            .menu-toggle { display: block; }
-            
-            /* Animação do menu */
-            .menu-toggle.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-            .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
-            .menu-toggle.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        } 
-
-        /* Seção de livros de suspense */
-        .suspense-container {
-            padding: 60px 5%;
-            text-align: center; 
-        }
-        
-        .suspense-container h1 {
-            font-size: 3.5rem;
-            color: var(--global-primary); 
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 2px 2px 4px rgba(140, 44, 44, 0.3);
-        }
-
-        .suspense-container p.subtitle {
-            font-size: 1.3rem;
-            color: var(--global-secondary); 
-            margin-bottom: 50px;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            gap: 8px;
         }
 
-        /* Grid de livros */
-        .book-list {
+        .btn-primary {
+            background-color: var(--primary-main);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--surface);
+            box-shadow: 0 2px 12px var(--shadow);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center; 
-            gap: 40px;
-            max-width: 1300px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* Cards de livros */
-        .book-card {
-            background-color: var(--card-bg); 
-            border: 3px solid var(--global-light); 
-            border-radius: 15px;
-            padding: 25px;
-            width: 100%;
-            max-width: 280px;
-            box-shadow: 0 8px 25px var(--shadow-light);
-            transition: all 0.4s ease;
-            text-align: left; 
-            cursor: pointer; 
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
         }
 
-        .book-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(140, 44, 44, 0.25);
-            border-color: var(--global-primary);
+        .logo-icon {
+            color: var(--primary-main);
+            font-size: 1.75rem;
         }
 
-        .book-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px solid var(--global-light);
-            transition: transform 0.3s ease;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
-        .book-card:hover img {
-            transform: scale(1.05);
+        .nav-links a {
+            color: var(--text-primary);
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
         }
 
-        .book-card h3 {
-            font-size: 1.4rem;
-            color: var(--global-primary); 
-            margin-bottom: 8px;
+        .nav-links a.active {
+            color: var(--primary-main);
         }
 
-        .book-card .author {
-            color: var(--global-secondary); 
-            font-weight: 600;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        /* Janelas pop-up */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 2000; 
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
             left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-main);
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+        .card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow-hover);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: var(--modal-bg); 
-            padding-top: 60px;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
-            background-color: var(--modal-content-bg); 
-            margin: 5% auto; 
-            padding: 40px;
-            border: 3px solid var(--global-primary); 
-            width: 85%;
-            max-width: 750px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            display: flex;
-            gap: 35px;
-            animation: fadeIn 0.4s ease;
-            color: var(--global-dark);
-        }
-
-        /* Animação do pop-up */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .modal-content .book-image {
-            flex: 0 0 220px; 
-            max-height: 320px;
-            overflow: hidden;
+            background-color: var(--surface);
             border-radius: 12px;
-        }
-        
-        .modal-content .book-image img {
+            max-width: 600px;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 3px solid var(--global-primary);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-details {
-            flex-grow: 1;
-            text-align: left;
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .modal-details h2 {
-            color: var(--global-primary);
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+        .modal-title {
+            margin: 0;
         }
 
-        .modal-details .author {
-            color: var(--global-secondary); 
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            display: block;
-            font-weight: 600;
-        }
-
-        .modal-details p {
-            color: var(--global-dark); 
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.7;
-        }
-
-        /* Botão para fechar pop-up */
-        .close-btn {
-            float: right;
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--global-primary);
-            transition: color 0.3s;
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
-            line-height: 1;
+            color: var(--text-muted);
         }
 
-        .close-btn:hover,
-        .close-btn:focus {
-            color: var(--global-secondary);
-            text-decoration: none;
-            cursor: pointer;
+        .modal-body {
+            padding: 1.5rem;
         }
 
-        /* Responsividade do modal */
         @media (max-width: 768px) {
-            .modal-content {
-                flex-direction: column;
-                margin: 20px;
-                padding: 30px;
-                gap: 25px;
+            .nav-links {
+                display: none;
             }
-            .modal-content .book-image {
-                flex: none;
-                max-width: 200px;
-                margin: 0 auto 20px auto;
+
+            .mobile-menu-btn {
+                display: block;
             }
-            .modal-details {
-                text-align: center;
-            }
-            .modal-details .author {
-                text-align: center;
-            }
-        }
-        
-        /* Rodapé */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: var(--global-primary);
-            color: var(--global-light);
-            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
+    <div class="app-container">
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="index.php" class="logo">
+                    <span class="logo-icon">📚</span>
+                    bibliotec
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="index.php">Início</a>
+                    <a href="categorias.php">Categorias</a>
+                    <a href="sobre.php">Sobre</a>
+                    <a href="login.php" class="btn btn-secondary">Entrar</a>
+                </nav>
+                
+                <button class="btn btn-ghost mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
 
-    <!-- Pop-up de detalhes do livro -->
+        <main>
+            <section class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Livros de Suspense</h2>
+                        <p class="section-subtitle">Mistérios, crimes e reviravoltas que vão te prender até a última página</p>
+                    </div>
+                    
+                    <div class="grid grid-3">
+                        <!-- Livro 1 -->
+                        <div class="card">
+                            <img src="img/a_garota_no_trem.jpg" alt="A Garota no Trem" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">A Garota no Trem</h3>
+                                <p class="card-text">Paula Hawkins</p>
+                                <p class="card-text">Suspense Psicológico • 2015</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal('suspense1')">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Livro 2 -->
+                        <div class="card">
+                            <img src="img/expresso_oriental.jpg" alt="Assassinato no Expresso do Oriente" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">Assassinato no Expresso do Oriente</h3>
+                                <p class="card-text">Agatha Christie</p>
+                                <p class="card-text">Suspense Policial • 1934</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal('suspense2')">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Livro 3 -->
+                        <div class="card">
+                            <img src="img/millennium.jpg" alt="Os Homens que Não Amavam as Mulheres" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">Os Homens que Não Amavam as Mulheres</h3>
+                                <p class="card-text">Stieg Larsson</p>
+                                <p class="card-text">Suspense Investigativo • 2005</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal('suspense3')">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Livro 4 -->
+                        <div class="card">
+                            <img src="img/talentoso_ripley.jpg" alt="O Talentoso Ripley" class="card-img">
+                            <div class="card-body">
+                                <h3 class="card-title">O Talentoso Ripley</h3>
+                                <p class="card-text">Patricia Highsmith</p>
+                                <p class="card-text">Suspense Psicológico • 1955</p>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="openBookModal('suspense4')">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-bottom">
+                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de Detalhes do Livro -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <div class="book-image">
-                <img id="modalImage" src="" alt="Capa do Livro">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalBookTitle">Detalhes do Livro</h3>
+                <button class="modal-close" onclick="closeBookModal()">&times;</button>
             </div>
-            <div class="modal-details">
-                <h2 id="modalTitle"></h2>
-                <span id="modalAuthor" class="author"></span>
-                <p id="modalDescription"></p>
-                <button class="btn-primary" onclick="closeModal()" style="width: 100%; padding: 15px; font-size: 1.1rem;">Fechar Detalhes</button>
+            <div class="modal-body">
+                <div id="modalBookContent">
+                    <!-- Conteúdo carregado via JavaScript -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Menu de navegação -->
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-icon">📚</span>
-            bibliotec
-        </div>
-        <nav class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="categorias.php" class="active">Categorias</a>
-            <a href="sobre.php">Sobre</a>
-            <a href="login.php" class="btn-login">Login</a>
-        </nav>
-        <button class="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-    </header>
-
-    <!-- Conteúdo principal -->
-    <main>
-        <div class="suspense-container">
-            <h1>Suspense & Mistério</h1>
-            <p class="subtitle">As respostas estão escondidas entre as linhas. Ousaria procurar?</p>
-
-            <!-- Lista de livros -->
-            <div class="book-list">
-                
-                <div class="book-card" onclick="openModal('A Garota no Trem', 'Paula Hawkins', 'img/a garota no trem.png', 'Rachel pega o trem todos os dias passando por casas e observa um casal aparentemente perfeito. Quando a mulher desaparece, ela se envolve numa trama complexa de mentiras, memória e perigo.', 'Suspense Psicológico')">
-                    <img src="img/a garota no trem.png" alt="Capa do Livro A Garota no Trem"> 
-                    <h3>A Garota no Trem</h3>
-                    <span class="author">Paula Hawkins</span>
-                    <p style="color: var(--global-secondary); font-size: 0.95rem;">Suspense Psicológico</p>
-                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
-                </div>
-
-                <div class="book-card" onclick="openModal('Assassinato no Expresso do Oriente', 'Agatha Christie', 'img/expresso.png', 'Um dos livros mais famosos de Agatha Christie. O detetive Hercule Poirot investiga um assassinato dentro de um trem de luxo. Repleto de pistas falsas e um final surpreendente.', 'Suspense policial clássico')">
-                    <img src="img/expresso.png" alt="Capa do Livro Assassinato no Expresso do Oriente">
-                    <h3>Assassinato no Expresso do Oriente</h3>
-                    <span class="author">Agatha Christie</span>
-                    <p style="color: var(--global-secondary); font-size: 0.95rem;">Suspense policial clássico</p>
-                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
-                </div>
-
-                <div class="book-card" onclick="openModal('Os Homens que Não Amavam as Mulheres', 'Stieg Larsson', 'img/os homen que nao amavam.png', 'Primeiro livro da trilogia "Millennium". Um jornalista e uma hacker investigam um desaparecimento não resolvido há décadas, revelando segredos obscuros.', 'Suspense investigativo')">
-                    <img src="img/os homen que nao amavam.png" alt="Capa do Livro Os Homens que Não Amavam as Mulheres">
-                    <h3>Os Homens que Não Amavam as Mulheres</h3>
-                    <span class="author">Stieg Larsson</span>
-                    <p style="color: var(--global-secondary); font-size: 0.95rem;">Suspense investigativo</p>
-                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
-                </div>
-
-                <div class="book-card" onclick="openModal('O Talentoso Ripley', 'Patricia Highsmith', 'img/o talentoso ripley.png', 'Conta a história de Tom Ripley, um jovem ambicioso que assume a identidade de outro homem, mergulhando num mundo de mentiras, roubo e assassinato.', 'Suspense psicológico')">
-                    <img src="img/o talentoso ripley.png" alt="Capa do Livro O Talentoso Ripley">
-                    <h3>O Talentoso Ripley</h3>
-                    <span class="author">Patricia Highsmith</span>
-                    <p style="color: var(--global-secondary); font-size: 0.95rem;">Suspense psicológico</p>
-                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 bibliotec. Todos os direitos reservados. Feito com mistério. 🕵️‍♂️</p>
-    </footer>
-
     <script>
-        // Menu para celular
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            this.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
-
-        // Pop-up de detalhes
-        const modal = document.getElementById('bookModal');
-        const span = document.getElementsByClassName('close-btn')[0];
-
-        // Função para abrir o pop-up
-        function openModal(title, author, image, description) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalAuthor').textContent = 'Por: ' + author;
-            document.getElementById('modalImage').src = image;
-            document.getElementById('modalDescription').textContent = description;
-            modal.style.display = "block";
-        }
-
-        // Função para fechar o pop-up
-        function closeModal() {
-            modal.style.display = "none";
-        }
-
-        // Fechar pop-up ao clicar no X
-        span.onclick = closeModal;
-
-        // Fechar pop-up ao clicar fora
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
+        function openBookModal(bookId) {
+            const books = {
+                suspense1: {
+                    title: "A Garota no Trem",
+                    author: "Paula Hawkins",
+                    description: "Rachel pega o trem todos os dias passando por casas e observa um casal aparentemente perfeito. Quando a mulher desaparece, ela se envolve numa trama complexa de mentiras, memória e perigo.",
+                    genre: "Suspense Psicológico",
+                    year: "2015",
+                    price: "R$ 34,90",
+                    pages: "368 páginas"
+                },
+                suspense2: {
+                    title: "Assassinato no Expresso do Oriente",
+                    author: "Agatha Christie",
+                    description: "Um dos livros mais famosos de Agatha Christie. O detetive Hercule Poirot investiga um assassinato dentro de um trem de luxo. Repleto de pistas falsas e um final surpreendente.",
+                    genre: "Suspense Policial",
+                    year: "1934",
+                    price: "R$ 29,90",
+                    pages: "256 páginas"
+                },
+                suspense3: {
+                    title: "Os Homens que Não Amavam as Mulheres",
+                    author: "Stieg Larsson",
+                    description: "Primeiro livro da trilogia 'Millennium'. Um jornalista e uma hacker investigam um desaparecimento não resolvido há décadas, revelando segredos obscuros.",
+                    genre: "Suspense Investigativo",
+                    year: "2005",
+                    price: "R$ 44,90",
+                    pages: "672 páginas"
+                },
+                suspense4: {
+                    title: "O Talentoso Ripley",
+                    author: "Patricia Highsmith",
+                    description: "Conta a história de Tom Ripley, um jovem ambicioso que assume a identidade de outro homem, mergulhando num mundo de mentiras, roubo e assassinato.",
+                    genre: "Suspense Psicológico",
+                    year: "1955",
+                    price: "R$ 32,90",
+                    pages: "286 páginas"
+                }
+            };
+            
+            const book = books[bookId];
+            if (book) {
+                document.getElementById('modalBookTitle').textContent = book.title;
+                document.getElementById('modalBookContent').innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <img src="img/${book.title.toLowerCase().replace(/ /g, '_')}.jpg" alt="${book.title}" style="width: 100%; border-radius: 8px;">
+                        </div>
+                        <div>
+                            <h4>${book.title}</h4>
+                            <p><strong>Autor:</strong> ${book.author}</p>
+                            <p><strong>Gênero:</strong> ${book.genre}</p>
+                            <p><strong>Ano:</strong> ${book.year}</p>
+                            <p><strong>Páginas:</strong> ${book.pages}</p>
+                            <p><strong>Preço:</strong> ${book.price}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>Sinopse</h5>
+                        <p>${book.description}</p>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                `;
+                document.getElementById('bookModal').classList.add('active');
             }
         }
+
+        function closeBookModal() {
+            document.getElementById('bookModal').classList.remove('active');
+        }
+
+        document.getElementById('bookModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookModal();
+            }
+        });
+
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
     </script>
 </body>
 </html>
