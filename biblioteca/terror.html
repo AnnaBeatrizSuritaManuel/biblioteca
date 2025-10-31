@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bibliotec - Livros de Terror</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+                /* Cores principais do tema terror */
+        :root {
+            --global-primary: #B22222;    
+            --global-secondary: #424141; 
+            --global-background: #757575; 
+            --global-dark: #181818;       
+            --global-light: #FFFFFF;     
+            --shadow-light: rgb(104, 0, 0);
+            --card-bg: #ffd6d6;           
+            --modal-bg: rgba(0, 0, 0, 0.5); 
+            --modal-content-bg: #ffd6d6;  
+            --navbar-bg: #979797;         
+        }
+
+                /* Configurações gerais */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            line-height: 1.6; 
+            background-color: var(--global-background); 
+            color: var(--global-dark); 
+        }
+        h1, h2, h3 { font-weight: 700; color: var(--global-dark); }
+        a { text-decoration: none; color: var(--global-primary); transition: color 0.3s; }
+        
+                /* Layout principal */
+        main { 
+            padding-top: 65px; 
+            min-height: calc(100vh - 65px - 60px); 
+            background-color: var(--global-background);
+        } 
+
+                /* Estilo dos botões */
+        .btn-primary, .btn-secondary {
+            display: inline-block; padding: 10px 20px; border-radius: 30px; font-weight: 600; text-align: center; transition: background-color 0.3s, transform 0.2s; cursor: pointer;
+        }
+        .btn-primary {  
+            background-color: var(--global-primary);  
+            color: var(--global-light); 
+            border: 2px solid var(--global-primary);  
+        }
+        .btn-primary:hover {  
+            background-color: #900000; 
+            transform: translateY(-2px);  
+        }
+        
+                /* Menu de navegação */
+        .navbar {  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+            padding: 8px 5%; 
+            background-color: var(--navbar-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); 
+            position: fixed; top: 0; width: 100%; z-index: 1000;  
+        }
+        .logo {  
+            font-size: 1.5rem; 
+            font-weight: 700;  
+            color: var(--global-primary); 
+        }
+        
+        .nav-links a {  
+            margin-left: 15px; 
+            font-weight: 500;  
+            font-size: 0.95rem; 
+            color: var(--global-dark); 
+            padding: 5px 0; position: relative;  
+        }
+        .nav-links a[href="categorias.html"] { color: var(--global-primary); } 
+        .nav-links a.active, .nav-links a:hover { color: var(--global-primary); } 
+        .nav-links a:not(.btn-login):after { content: ''; position: absolute; width: 0; height: 2px; background: var(--global-primary); bottom: -5px; left: 0; transition: width 0.3s; }
+        .nav-links a:hover:not(.btn-login):after,
+        .nav-links a.active:not(.btn-login):after { width: 100%; }
+        
+        .btn-login {  
+            background-color: var(--global-primary);  
+            color: var(--global-light) !important; 
+            padding: 6px 14px;  
+            border-radius: 20px;  
+            margin-left: 15px;  
+            text-decoration: none;
+        }
+
+                /* Menu para celular */
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+        .menu-toggle .bar { display: block; width: 25px; height: 3px; margin: 4px auto; background-color: var(--global-dark);  transition: all 0.3s ease-in-out; }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 55px; left: 0; width: 100%;
+                background-color: var(--card-bg); 
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25); 
+                padding: 5px 0;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { margin: 5px 0; padding: 8px 5%; font-size: 1rem; text-align: center; border-bottom: 1px solid #CCC; margin-left: 0; }
+            .btn-login { margin: 5px auto 10px auto; }
+            .menu-toggle { display: block; }
+            
+                        /* Animação do menu biblioteca */
+            .menu-toggle.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+            .menu-toggle.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        } 
+
+                /* Seção de livros de terror */
+        .terror-container {
+            padding: 40px 5%;
+            text-align: center; 
+        }
+        
+        .terror-container h1 {
+            font-size: 3rem;
+            color: var(--global-primary); 
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--shadow-light); 
+        }
+
+        .terror-container p.subtitle {
+            font-size: 1.2rem;
+            color: var(--global-secondary); 
+            margin-bottom: 40px;
+        }
+
+                /* Grid de livros */
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; 
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+                /* Cards de livros */
+        .book-card {
+            background-color: var(--card-bg); 
+            border: 1px solid #D0D0D0; 
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left; 
+            cursor: pointer; 
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow-light); 
+        }
+
+        .book-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid var(--global-secondary);
+        }
+
+        .book-card h3 {
+            font-size: 1.3rem;
+            color: var(--global-dark); 
+            margin-bottom: 5px;
+        }
+
+        .book-card .author {
+            color: var(--global-primary); 
+            font-weight: 500;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+                /* Janelas pop-up */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: var(--modal-bg); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: var(--modal-content-bg); 
+            margin: 5% auto; 
+            padding: 30px;
+            border: 2px solid var(--global-primary); 
+            width: 80%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            display: flex;
+            gap: 30px;
+            animation: fadeIn 0.3s;
+            color: var(--global-dark);
+        }
+
+                /* Animação do pop-up */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content .book-image {
+            flex: 0 0 200px; 
+            max-height: 300px;
+            overflow: hidden;
+        }
+        
+        .modal-content .book-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--global-primary);
+        }
+
+        .modal-details {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .modal-details h2 {
+            color: var(--global-primary);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .modal-details .author {
+            color: var(--global-dark); 
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .modal-details p {
+            color: var(--global-dark); 
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+                /* Botão para fechar pop-up */
+        .close-btn {
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            color: var(--global-primary);
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--global-dark);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+                /* Responsividade do modal */
+        @media (max-width: 600px) {
+            .modal-content {
+                flex-direction: column;
+                margin: 20px;
+                padding: 20px;
+            }
+            .modal-content .book-image {
+                flex: none;
+                max-width: 150px;
+                margin: 0 auto 15px auto;
+            }
+            .modal-details {
+                text-align: center;
+            }
+            .modal-details .author {
+                text-align: center;
+            }
+        }
+        
+                /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--navbar-bg); 
+            color: var(--global-dark); 
+            font-size: 0.9rem;
+            border-top: 1px solid #C0C0C0; 
+        }
+    </style>
+</head>
+<body>
+
+        <!-- Pop-up de detalhes do livro -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="book-image">
+                <img id="modalImage" src="" alt="Capa do Livro">
+            </div>
+            <div class="modal-details">
+                <h2 id="modalTitle"></h2>
+                <span id="modalAuthor" class="author"></span>
+                <p id="modalDescription"></p>
+                <button class="btn-primary" onclick="closeModal()" style="width: 100%;">Fechar Detalhes</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- Menu de navegação -->
+    <header class="navbar">
+        <div class="logo">bibliotec</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="categorias.html" class="active">Categorias</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="login.html" class="btn-login">Login</a>
+        </nav>
+        <button class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </header>
+
+        <!-- Conteúdo principal -->
+    <main>
+        <div class="terror-container">
+            <h1>Terror </h1>
+            <p class="subtitle">O terror vigia cada capítulo, esperando que você avance.</p>
+
+                        <!-- Lista de livros -->
+            <div class="book-list">
+                
+                <div class="book-card" onclick="openModal('O Exorcista', 'William Peter Blatty', 'img/O exorcista.png', 'Inspirado em um caso real, o livro conta a história de uma menina possuída por uma entidade demoníaca e dos esforços de dois padres para realizar um exorcismo. É uma narrativa intensa, explorando medo, fé e possessão.', 'Horror Cósmico')">
+                    <img src="img/O exorcista.png" alt="Capa do Livro O Exorcista"> 
+                    <h3>O Exorcista</h3>
+                    <span class="author">William Peter Blatty</span>
+                    <p style="color: var(--global-secondary); font-size: 0.9rem;">Terror sobrenatural</p>
+                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
+                </div>
+
+                <div class="book-card" onclick="openModal('It: A Coisa', 'Stephen King', 'img/it.png', 'Uma história que alterna entre passado e presente, acompanhando um grupo de amigos que enfrenta uma entidade maléfica chamada “Pennywise”, que se manifesta como um palhaço para aterrorizar crianças na cidade de Derry. Mistura elementos de horror, amizade e trauma.', 'Terror psicológico e sobrenatural')">
+                    <img src="img/it.png" alt="Capa do Livro It: A Coisa">
+                    <h3>It: A Coisa</h3>
+                    <span class="author">Stephen King</span>
+                    <p style="color: var(--global-secondary); font-size: 0.9rem;">Terror psicológico e sobrenatural</p>
+                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
+                </div>
+
+                <div class="book-card" onclick="openModal('Drácula', 'Bram Stoker', 'img/dracula.png', 'Um clássico da literatura, conta a história do Conde Drácula e sua tentativa de expandir sua influência vampírica para a Inglaterra. É narrado em forma de diários, cartas e relatos, criando um clima envolvente e perturbador.', 'Terror gótico e sobrenatural')">
+                    <img src="img/dracula.png" alt="Capa do Livro Drácula">
+                    <h3>Drácula</h3>
+                    <span class="author">Bram Stoker</span>
+                    <p style="color: var(--global-secondary); font-size: 0.9rem;">Terror gótico e sobrenatural</p>
+                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
+                </div>
+
+                <div class="book-card" onclick="openModal('Bird Box', 'Josh Malerman', 'img/bird.png', 'Em um mundo apocalíptico, uma força misteriosa leva as pessoas à loucura ao serem vistas. A protagonista vive em constante medo e precisa sobreviver vendada junto com seus filhos para escapar da ameaça invisível, em uma história tensa e claustrofóbica.', 'Terror psicológico')">
+                    <img src="img/bird.png" alt="Capa do Livro Bird Box">
+                    <h3>Bird Box</h3>
+                    <span class="author">Josh Malerman</span>
+                    <p style="color: var(--global-secondary); font-size: 0.9rem;">Terror psicológico</p>
+                    <a href="javascript:void(0)" class="btn-primary" style="margin-top: 15px; width: 100%;">Ver Detalhes</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 bibliotec. Todos os direitos reservados. Feito com sombras. 🩸</p>
+    </footer>
+
+    <script>
+                // Menu para celular
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            this.classList.toggle('open');
+            navLinks.classList.toggle('open');
+        });
+
+                // Pop-up de detalhes
+        const modal = document.getElementById('bookModal');
+        const span = document.getElementsByClassName('close-btn')[0];
+
+                // Função para abrir o pop-up
+        function openModal(title, author, image, description) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalAuthor').textContent = 'Por: ' + author;
+            document.getElementById('modalImage').src = image;
+            document.getElementById('modalDescription').textContent = description;
+            modal.style.display = "block";
+        }
+
+                // Função para fechar o pop-up
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+       
+                // Fechar pop-up ao clicar no X
+        span.onclick = closeModal;
+
+       
+                // Fechar pop-up ao clicar fora
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

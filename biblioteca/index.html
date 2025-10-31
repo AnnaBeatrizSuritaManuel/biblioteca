@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bibliotec - Sua Biblioteca Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+   
+    <style>
+        /* Cores principais do site */
+        :root {
+            --global-primary: #50006f;
+            --global-secondary: #473C3B;
+            --global-background: #9e7ba8;
+            --global-dark: #3c1958;
+            --global-light: #dcb6fa;
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            --hero-background: #bb88d3;
+            --book-highlight: #6200b3;
+            --card-bg-light: #e0c7fa;
+            --card-bg-medium: #bf9ce0;
+            --section-bg-light: #bb88d3;
+        }
+ 
+        /* Configurações gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.6;
+            background-color: var(--global-background);
+            color: var(--global-dark);
+        }
+ 
+        h1, h2, h3 {
+            font-weight: 700;
+            color: var(--global-dark);
+        }
+ 
+        a {
+            text-decoration: none;
+            color: var(--global-primary);
+            transition: color 0.3s;
+        }
+ 
+        /* menu fixo */
+        main {
+            padding-top: 65px;
+            min-height: calc(100vh - 65px - 60px);
+            background-color: var(--section-bg-light);
+        }
+ 
+        .section-content {
+            padding: 60px 5%;
+            text-align: center;
+            background-color: var(--global-background);
+        }
+ 
+        .section-content h2 {
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+ 
+        /* Estilo dos botões */
+        .btn-primary, .btn-secondary {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+ 
+        .btn-primary {
+            background-color: var(--global-primary);
+            color: var(--global-light);
+            border: 2px solid var(--global-primary);
+        }
+ 
+        .btn-primary:hover {
+            background-color: #782090;
+            transform: translateY(-2px);
+        }
+ 
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--global-primary);
+            border: 2px solid var(--global-primary);
+        }
+ 
+        .btn-secondary:hover {
+            background-color: var(--global-primary);
+            color: var(--global-light);
+        }
+ 
+        /* Menu de navegação */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 5%;
+            background-color: var(--global-light);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+ 
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--global-dark);
+        }
+ 
+        .logo strong {
+            color: var(--global-primary);
+        }
+ 
+        .nav-links a {
+            margin-left: 15px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--global-dark);
+            padding: 5px 0;
+            position: relative;
+        }
+ 
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--global-primary);
+        }
+ 
+        .nav-links a:not(.btn-login):after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--global-primary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+ 
+        .nav-links a:hover:not(.btn-login):after,
+        .nav-links a.active:not(.btn-login):after {
+            width: 100%;
+        }
+ 
+        .btn-login {
+            background-color: var(--global-primary);
+            color: var(--global-light) !important;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-left: 15px;
+        }
+ 
+        /* Menu para celular */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+ 
+        .menu-toggle .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 4px auto;
+            background-color: var(--global-dark);
+            transition: all 0.3s ease-in-out;
+        }
+ 
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                width: 100%;
+                background-color: var(--global-light);
+                box-shadow: 0 5px 10px var(--shadow-light);
+                padding: 5px 0;
+            }
+ 
+            .nav-links.open {
+                display: flex;
+            }
+ 
+            .nav-links a {
+                margin: 5px 0;
+                padding: 8px 5%;
+                font-size: 1rem;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+                margin-left: 0;
+            }
+ 
+            .btn-login {
+                margin: 5px auto 10px auto;
+            }
+ 
+            .menu-toggle {
+                display: block;
+            }
+ 
+            /* Animação do menu livros */
+            .menu-toggle.open .bar:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+            }
+ 
+            .menu-toggle.open .bar:nth-child(2) {
+                opacity: 0;
+            }
+ 
+            .menu-toggle.open .bar:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
+            }
+        }
+ 
+        /* Grid de cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+ 
+        .book-card, .category-card {
+            background: var(--card-bg-light);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            text-align: center;
+            transition: box-shadow 0.3s, transform 0.3s;
+            border: 1px solid #77558e;
+        }
+ 
+        /* Cores diferentes para cada card */
+        .book-card:nth-child(1) {
+            background-color: #bf9ce0;
+            border-color: #501778;
+        }
+ 
+        .book-card:nth-child(2) {
+            background-color: #bf9ce0;
+            border-color: #501778;
+        }
+ 
+        .book-card:nth-child(3) {
+            background-color: #bf9ce0;
+            border-color: #501778;
+        }
+ 
+        .book-card:hover, .category-card:hover {
+            box-shadow: 0 8px 20px 0 var(--book-highlight);
+            transform: translateY(-5px);
+        }
+ 
+        .book-card img, .carousel-card img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+ 
+        /* Seção principal */
+        .hero-section {
+            padding: 80px 5%;
+            background-color: var(--hero-background);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+ 
+        .hero-content {
+            flex: 1 1 40%;
+            min-width: 300px;
+        }
+ 
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+ 
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: var(--global-secondary);
+        }
+ 
+        /* Carrossel 3D */
+        .carousel-container {
+            flex: 1 1 50%;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+ 
+        .carousel-group {
+            width: 200px;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease-in-out;
+        }
+ 
+        .carousel-card {
+            background: var(--card-bg-medium);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px #3c008033;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #bf9ce0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+ 
+        /* Posicionamento 3D dos cards */
+        .carousel-group .carousel-card:nth-child(1) {
+            transform: rotateY(0deg) translateZ(280px);
+        }
+ 
+        .carousel-group .carousel-card:nth-child(2) {
+            transform: rotateY(120deg) translateZ(280px);
+        }
+ 
+        .carousel-group .carousel-card:nth-child(3) {
+            transform: rotateY(240deg) translateZ(280px);
+        }
+ 
+        .carousel-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+ 
+        /* Efeitos do carrossel */
+        .carousel-card:hover {
+            transform: scale(1.05) translateZ(300px);
+            box-shadow: 0 10px 30px rgba(70, 0, 128, 0.5);
+        }
+ 
+        .carousel-card:focus-within {
+            box-shadow: 0 0 0 5px var(--global-primary), 0 10px 40px rgba(60, 0, 128, 0.8);
+        }
+ 
+        /* Botões de navegação do carrossel */
+        .carousel-nav {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+            padding: 0 10px;
+        }
+ 
+        .carousel-nav button {
+            background: rgba(124, 35, 183, 0.7);
+            color: var(--global-light);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+ 
+        .carousel-nav button:hover {
+            background: var(--global-primary);
+            transform: scale(1.1);
+        }
+ 
+        @media (max-width: 992px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+ 
+            .hero-content {
+                order: 2;
+                margin-top: 30px;
+            }
+ 
+            .carousel-container {
+                order: 1;
+                overflow-x: hidden;
+            }
+        }
+ 
+        /* Janelas pop-up */
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(43, 37, 36, 0.9);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+ 
+        .modal:target {
+            opacity: 1;
+            pointer-events: auto;
+        }
+ 
+        .modal-content {
+            background: var(--global-light);
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            width: 90%;
+            max-width: 650px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.7);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+ 
+        .modal:target .modal-content {
+            transform: scale(1);
+        }
+ 
+        .modal-body {
+            display: flex;
+            gap: 25px;
+            text-align: left;
+        }
+ 
+        .modal-body img {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+ 
+        .modal-text h3 {
+            font-size: 1.8rem;
+            color: var(--global-primary);
+            margin-bottom: 5px;
+        }
+ 
+        .modal-text h4 {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--global-secondary);
+            margin-bottom: 20px;
+        }
+ 
+        .modal-text p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+ 
+        /* Botão para fechar pop-up */
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: var(--global-secondary);
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 1;
+            text-decoration: none;
+        }
+ 
+        @media (max-width: 600px) {
+            .modal-body {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+ 
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--global-dark);
+            color: var(--global-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+ 
+<body>
+ 
+    <header class="navbar">
+        <div class="logo">bibliotec</div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="categorias.html">Categorias</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="login.html" class="btn-login">Login</a>
+        </nav>
+        <button class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </header>
+ 
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Suas aventuras literárias continuam aqui</h1>
+                <p>Descubra todos os tipos de livros de terror, suspense e fantasia aqui.</p>
+                <a href="categorias.html" class="btn-primary">Ver categorias</a>
+            </div>
+ 
+            <div class="carousel-container">
+                <div class="carousel-nav">
+                    <button class="prev-btn">&leftarrow;</button>
+                    <button class="next-btn">&rightarrow;</button>
+                </div>
+ 
+                <div class="carousel-group">
+                    <a href="#carousel-modal" class="carousel-card" data-title="O Pequeno Príncipe"
+                        data-author="Antoine de Saint-Exupéry | Páginas: 96" data-image="img/pequeno principe.png"
+                        data-sinopse="Uma das obras literárias mais vendidas de todos os tempos. A história de um piloto que cai no deserto do Saara e encontra um pequeno príncipe de outro planeta, explorando temas como amizade, amor e perda.">
+                        <img src="img/pequeno principe.png" alt="O Pequeno Príncipe">
+                        <h3>O Pequeno Príncipe</h3>
+                    </a>
+ 
+                    <a href="#carousel-modal" class="carousel-card" data-title="1984" data-author="George Orwell | Páginas: 416"
+                        data-image="img/1984.png"
+                        data-sinopse="Sinopse: Um clássico da literatura distópica, descrevendo um futuro totalitário onde o Estado controla até o pensamento dos cidadãos. É uma poderosa reflexão sobre liberdade, vigilância e poder.">
+                        <img src="img/1984.png" alt="1984">
+                        <h3>1984</h3>
+                    </a>
+ 
+                    <a href="#carousel-modal" class="carousel-card" data-title="O Código Da Vinci"
+                        data-author="Dan Brown | Páginas: 432" data-image="img/codigo da vinte.png"
+                        data-sinopse="Sinopse: Um thriller intrigante que combina arte, história e conspiração. O professor Robert Langdon investiga um assassinato no Louvre, mergulhando em segredos ligados à história da humanidade e à religião.">
+                        <img src="img/codigo da vinte.png" alt="O Código Da Vinci">
+                        <h3>O Código Da Vinci</h3>
+                    </a>
+                </div>
+            </div>
+        </section>
+ 
+        <section class="section-content">
+            <h2>Mais procurados desta semana</h2>
+            <div class="cards-grid">
+                <div class="book-card book-card-click">
+                    <img src="img/nunca minta.png" alt="Livro Nunca Minta">
+                    <h3>Nunca Minta</h3>
+                    <p class="genre">Suspense</p>
+                    <a href="#modal-labirinto" class="btn-secondary">Saiba Mais</a>
+                </div>
+                <div class="book-card book-card-click">
+                    <img src="img/jogo dos deuses.png" alt="Os Jogos dos Deuses">
+                    <h3>Os Jogos dos Deuses</h3>
+                    <p class="genre">Fantasia</p>
+                    <a href="#modal-reino" class="btn-secondary">Saiba Mais</a>
+                </div>
+                <div class="book-card book-card-click">
+                    <img src="img/o paciente.png" alt="O Paciente">
+                    <h3>O Paciente</h3>
+                    <p class="genre">Terror Psicológico</p>
+                    <a href="#modal-casa" class="btn-secondary">Saiba Mais</a>
+                </div>
+            </div>
+        </section>
+    </main>
+ 
+    <div id="carousel-modal" class="modal">
+        <div class="modal-content">
+            <a href="#close" class="modal-close">&times;</a>
+            <div class="modal-body">
+                <img id="modal-img" src="" alt="Capa do Livro">
+                <div class="modal-text">
+                    <h3 id="modal-title"></h3>
+                    <h4 id="modal-author"></h4>
+                    <p id="modal-sinopse"></p>
+                    <a href="#close" class="btn-primary">Fechar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="modal-labirinto" class="modal">
+        <div class="modal-content">
+            <a href="#close" class="modal-close">&times;</a>
+            <div class="modal-body">
+                <img src="img/nunca minta.png" alt="Capa Nunca Minta">
+                <div class="modal-text">
+                    <h3>Nunca Minta</h3>
+                    <h4>Autor: Freida McFadden | Páginas: 368</h4>
+                    <p>Sinopse: Neste thriller psicológico, um casal isolado em uma casa remota começa a descobrir segredos perturbadores sobre o desaparecimento de uma jovem. A trama é repleta de reviravoltas e tensão, mantendo os leitores intrigados até a última página.</p>
+                    <a href="#close" class="btn-primary">Fechar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="modal-reino" class="modal">
+        <div class="modal-content">
+            <a href="#close" class="modal-close">&times;</a>
+            <div class="modal-body">
+                <img src="img/jogo dos deuses.png" alt="Capa Os Jogos dos Deuses">
+                <div class="modal-text">
+                    <h3>Os Jogos dos Deuses</h3>
+                    <h4>Autor: Abigail Owen | Páginas: 480</h4>
+                    <p>Sinopse: Neste romance de fantasia épica, os deuses antigos retornam ao mundo mortal, desencadeando uma série de eventos que desafiam o equilíbrio entre os mundos. A trama mistura mitologia, política e magia, oferecendo uma leitura envolvente para os fãs do gênero.</p>
+                    <a href="#close" class="btn-primary">Fechar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="modal-casa" class="modal">
+        <div class="modal-content">
+            <a href="#close" class="modal-close">&times;</a>
+            <div class="modal-body">
+                <img src="img/o paciente.png" alt="Capa O Paciente">
+                <div class="modal-text">
+                    <h3>O Paciente</h3>
+                    <h4>Autor: Jasper DeWitt | Páginas: 320</h4>
+                    <p>Sinopse: O jovem residente de psiquiatria, Dr. Parker, assume o caso de Joe, um paciente que está no hospital desde os 6 anos e vive isolado do mundo por ser considerado uma ameaça. Todos os que tentam tratá-lo se tornam loucos ou tiram a própria vida. O estilo narrativo remete à obra Frankenstein, de Mary Shelley, pois se desenrola através dos relatos do doutor Parker feitos em posts de um blog destinado aos médicos.</p>
+                    <a href="#close" class="btn-primary">Fechar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <footer>
+        <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+    </footer>
+ 
+    <script>
+        // Menu para celular
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            this.classList.toggle('open');
+            navLinks.classList.toggle('open');
+        });
+ 
+        // Carrossel 3D
+        const carouselGroup = document.querySelector('.carousel-group');
+        const prevButton = document.querySelector('.prev-btn');
+        const nextButton = document.querySelector('.next-btn');
+        const cards = document.querySelectorAll('.carousel-group .carousel-card');
+        const totalCards = cards.length;
+        const angle = 360 / totalCards;
+        let rotationY = 0;
+ 
+        // Gira o carrossel para esquerda ou direita
+        function rotateCarousel(direction) {
+            if (direction === 'next') {
+                rotationY -= angle;
+            } else if (direction === 'prev') {
+                rotationY += angle;
+            }
+           
+            carouselGroup.style.transform = `translateZ(-280px) rotateY(${rotationY}deg)`;
+        }
+ 
+        // Botões para girar o carrossel
+        nextButton.addEventListener('click', () => rotateCarousel('next'));
+        prevButton.addEventListener('click', () => rotateCarousel('prev'));
+ 
+        // Posição inicial do carrossel
+        carouselGroup.style.transform = `translateZ(-280px) rotateY(0deg)`;
+ 
+        // Pop-up do carrossel
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+               
+                // Pega informações do livro clicado
+                const title = card.getAttribute('data-title');
+                const author = card.getAttribute('data-author');
+                const image = card.getAttribute('data-image');
+                const sinopse = card.getAttribute('data-sinopse');
+ 
+                // Coloca as informações no pop-up
+                document.getElementById('modal-title').textContent = title;
+                document.getElementById('modal-author').textContent = author;
+                document.getElementById('modal-img').src = image;
+                document.getElementById('modal-img').alt = `Capa do livro ${title}`;
+                document.getElementById('modal-sinopse').textContent = sinopse;
+               
+                // Mostra o pop-up
+                window.location.hash = 'carousel-modal';
+            });
+        });
+    </script>
+</body>
+</html>
