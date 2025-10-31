@@ -316,7 +316,7 @@
                     <div class="grid grid-3">
                         <!-- Livro 1 -->
                         <div class="card">
-                            <img src="img/senhor_dos_aneis.jpg" alt="O Senhor dos Anéis" class="card-img">
+                            <img src="img/senhordosaneis.png" alt="O Senhor dos Anéis" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">O Senhor dos Anéis</h3>
                                 <p class="card-text">J.R.R. Tolkien</p>
@@ -329,7 +329,7 @@
                         
                         <!-- Livro 2 -->
                         <div class="card">
-                            <img src="img/narnia.jpg" alt="As Crônicas de Nárnia" class="card-img">
+                            <img src="img/narnia.png" alt="As Crônicas de Nárnia" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">As Crônicas de Nárnia</h3>
                                 <p class="card-text">C.S. Lewis</p>
@@ -342,7 +342,7 @@
                         
                         <!-- Livro 3 -->
                         <div class="card">
-                            <img src="img/spiderwick.jpg" alt="As Crônicas de Spiderwick" class="card-img">
+                            <img src="img/spiderwick.png" alt="As Crônicas de Spiderwick" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">As Crônicas de Spiderwick</h3>
                                 <p class="card-text">Holly Black & Tony DiTerlizzi</p>
@@ -355,7 +355,7 @@
 
                         <!-- Livro 4 -->
                         <div class="card">
-                            <img src="img/harry_potter.jpg" alt="Harry Potter e a Pedra Filosofal" class="card-img">
+                            <img src="img/harry.png" alt="Harry Potter e a Pedra Filosofal" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">Harry Potter e a Pedra Filosofal</h3>
                                 <p class="card-text">J.K. Rowling</p>

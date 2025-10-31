@@ -282,8 +282,8 @@
                             </div>
 
                             <div class="info-card">
-                                <h3><i class="fas fa-user"></i> Sobre Mim</h3>
-                                <p>Meu nome é Anna Beatriz. Tenho 17 anos e estudo na ETEC onde estou fazendo quase dois anos. Gosto de ler, jogar, assistir e aprender coisas novas. A criação deste projeto une minha paixão por tecnologia e literatura.</p>
+                                <h3><i class="fas fa-user"></i> Sobre Nós</h3>
+                                <p>nós somos um grupo de estudantes da etec MCM e este site é um trabalho da matéria sw-1 regida pelo professor Anderson Vanin em 2025, feito pelo alunos do 2f: Kevin, Angelo, Anna Beatriz, Arthur e Isabele</p>
                             </div>
                         </div>
 

@@ -316,7 +316,7 @@
                     <div class="grid grid-3">
                         <!-- Livro 1 -->
                         <div class="card">
-                            <img src="img/o_exorcista.jpg" alt="O Exorcista" class="card-img">
+                            <img src="img/oexorcista.png" alt="O Exorcista" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">O Exorcista</h3>
                                 <p class="card-text">William Peter Blatty</p>
@@ -355,7 +355,7 @@
 
                         <!-- Livro 4 -->
                         <div class="card">
-                            <img src="img/bird_box.jpg" alt="Bird Box" class="card-img">
+                            <img src="img/bird.png" alt="Bird Box" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">Bird Box</h3>
                                 <p class="card-text">Josh Malerman</p>

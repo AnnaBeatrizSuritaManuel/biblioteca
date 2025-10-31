@@ -316,7 +316,7 @@
                     <div class="grid grid-3">
                         <!-- Livro 1 -->
                         <div class="card">
-                            <img src="img/a_garota_no_trem.jpg" alt="A Garota no Trem" class="card-img">
+                            <img src="img/agarotanotrem.png" alt="A Garota no Trem" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">A Garota no Trem</h3>
                                 <p class="card-text">Paula Hawkins</p>
@@ -329,7 +329,7 @@
                         
                         <!-- Livro 2 -->
                         <div class="card">
-                            <img src="img/expresso_oriental.jpg" alt="Assassinato no Expresso do Oriente" class="card-img">
+                            <img src="img/expresso.png" alt="Assassinato no Expresso do Oriente" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">Assassinato no Expresso do Oriente</h3>
                                 <p class="card-text">Agatha Christie</p>
@@ -341,7 +341,7 @@
                         </div>
                         
                         <!-- Livro 3 -->
-                        <div class="card">
+                        <!-- <div class="card">
                             <img src="img/millennium.jpg" alt="Os Homens que Não Amavam as Mulheres" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">Os Homens que Não Amavam as Mulheres</h3>
@@ -351,10 +351,10 @@
                                     <button class="btn btn-primary" onclick="openBookModal('suspense3')">Ver Detalhes</button>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Livro 4 -->
-                        <div class="card">
+                        <!-- <div class="card">
                             <img src="img/talentoso_ripley.jpg" alt="O Talentoso Ripley" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">O Talentoso Ripley</h3>
@@ -366,7 +366,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </section>
         </main>
 

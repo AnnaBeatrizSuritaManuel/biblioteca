@@ -490,7 +490,7 @@
                     <div class="grid grid-3">
                         <!-- Card de Livro 1 -->
                         <div class="card">
-                            <img src="img/o_exorcista.jpg" alt="O Exorcista" class="card-img">
+                            <img src="img/oexorcista.png" alt="O Exorcista" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">O Exorcista</h3>
                                 <p class="card-text">William Peter Blatty</p>
@@ -503,7 +503,7 @@
                         
                         <!-- Card de Livro 2 -->
                         <div class="card">
-                            <img src="img/a_garota_no_trem.jpg" alt="A Garota no Trem" class="card-img">
+                            <img src="img/agarotanotrem.png" alt="A Garota no Trem" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">A Garota no Trem</h3>
                                 <p class="card-text">Paula Hawkins</p>
@@ -516,7 +516,7 @@
                         
                         <!-- Card de Livro 3 -->
                         <div class="card">
-                            <img src="img/senhor_dos_aneis.jpg" alt="O Senhor dos Anéis" class="card-img">
+                            <img src="img/senhordosaneis.png" alt="O Senhor dos Anéis" class="card-img">
                             <div class="card-body">
                                 <h3 class="card-title">O Senhor dos Anéis</h3>
                                 <p class="card-text">J.R.R. Tolkien</p>
