@@ -623,12 +623,6 @@
                             <p><strong>Ano:</strong> ${book.year}</p>
                             <p><strong>Preço:</strong> ${book.price}</p>
                             <p class="mt-3">${book.description}</p>
-                            <div class="mt-3">
-                                <button class="btn btn-primary">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    Adicionar ao Carrinho
-                                </button>
-                            </div>
                         </div>
                     </div>
                 `;
