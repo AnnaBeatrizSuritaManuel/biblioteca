@@ -155,8 +155,7 @@
             <h1 class="success-title">Login Concluído!</h1>
             
             <p class="success-message">
-                Bem-vinda de volta, Lara! Seu login foi realizado com sucesso. 
-                Agora você pode acessar todos os recursos da sua conta.
+              BEM VINDO!
             </p>
             
             <div class="button-group">
