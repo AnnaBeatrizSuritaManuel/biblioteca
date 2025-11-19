@@ -1,0 +1,198 @@
+/* Paleta principal: azul (#1e3a8a), vermelho (#b91c1c), preto (#0a0a0a) */
+/* Cada gênero de livro recebe cor de destaque */
+
+:root {
+    --azul: #1e3a8a;
+    --azul-claro: #3b82f6;
+    --vermelho: #b91c1c;
+    --vermelho-claro: #ef4444;
+    --preto: #0a0a0a;
+    --cinza: #1f1f1f;
+    --cinza-claro: #e5e5e5;
+
+    --ficcao: #8b5cf6;
+    --terror: #000000;
+    --romance: #db2777;
+    --misterio: #4b5563;
+    --aventura: #059669;
+    --hq: #f59e0b;
+    --drama: #7c3aed;
+    --fantasia: #2563eb;
+
+    --radius: 10px;
+    --transicao: 0.3s ease;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    background: var(--cinza);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* NAVBAR */
+nav {
+    width: 100%;
+    background: var(--preto);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 2px solid var(--azul-claro);
+}
+nav .logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--azul-claro);
+    letter-spacing: 1px;
+}
+nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: var(--radius);
+    transition: var(--transicao);
+}
+nav ul li a:hover {
+    background: var(--azul-claro);
+}
+
+/* CONTAINER PRINCIPAL */
+.container {
+    width: 90%;
+    margin: 40px auto;
+}
+
+/* CARDS DE LIVROS */
+.livros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+.livro-card {
+    background: var(--cinza);
+    border: 2px solid var(--cinza-claro);
+    border-radius: var(--radius);
+    padding: 15px;
+    transition: var(--transicao);
+    cursor: pointer;
+}
+.livro-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--azul-claro);
+}
+.livro-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+.livro-card h3 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--azul-claro);
+}
+.livro-card p {
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* CORES POR GÊNERO */
+.ficcao { border-left: 6px solid var(--ficcao); }
+.terror { border-left: 6px solid var(--terror); }
+.romance { border-left: 6px solid var(--romance); }
+.misterio { border-left: 6px solid var(--misterio); }
+.aventura { border-left: 6px solid var(--aventura); }
+.hq { border-left: 6px solid var(--hq); }
+.drama { border-left: 6px solid var(--drama); }
+.fantasia { border-left: 6px solid var(--fantasia); }
+
+/* BOTÕES */
+.btn {
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transicao);
+    font-weight: 600;
+}
+.btn-azul {
+    background: var(--azul);
+    color: white;
+}
+.btn-azul:hover {
+    background: var(--azul-claro);
+}
+.btn-vermelho {
+    background: var(--vermelho);
+    color: white;
+}
+.btn-vermelho:hover {
+    background: var(--vermelho-claro);
+}
+
+/* LOGIN PAGE */
+.login-box {
+    width: 360px;
+    margin: 80px auto;
+    background: var(--preto);
+    padding: 35px;
+    border-radius: var(--radius);
+    border: 2px solid var(--azul-claro);
+}
+.login-box h2 {
+    text-align: center;
+    color: var(--azul-claro);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: var(--radius);
+    border: 1px solid var(--cinza-claro);
+    background: var(--cinza);
+    color: white;
+}
+.login-box input:focus {
+    border-color: var(--azul-claro);
+}
+
+/* FOOTER */
+footer {
+    margin-top: 60px;
+    padding: 25px;
+    background: var(--preto);
+    text-align: center;
+    border-top: 2px solid var(--vermelho);
+}
+footer p {
+    opacity: 0.8;
+}
+
+/* RESPONSIVIDADE */
+@media(max-width: 768px){
+    nav ul {
+        gap: 10px;
+    }
+    .login-box {
+        width: 90%;
+    }
+}
