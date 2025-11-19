@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bibliotec - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --primary-dark: #1a1a1a;
@@ -60,18 +61,13 @@
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 500;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
             border: none;
-            font-family: 'Inter', sans-serif;
-            gap: 8px;
+            transition: 0.3s;
         }
 
         .btn-primary {
@@ -85,6 +81,7 @@
             box-shadow: 0 4px 12px var(--shadow-hover);
         }
 
+        /* NAVBAR */
         .navbar {
             position: fixed;
             top: 0;
@@ -127,33 +124,22 @@
         .nav-links a {
             color: var(--text-primary);
             font-weight: 500;
-            position: relative;
-            padding: 8px 0;
         }
 
         .nav-links a.active {
             color: var(--primary-main);
         }
 
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary-main);
-        }
-
+        /* CARD MAIOR AQUI */
         .login-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 500px; /* AQUI FICA MAIS LARGO */
             padding: 2rem;
         }
 
         .login-card {
             background: var(--surface);
-            padding: 2.5rem;
+            padding: 3rem; /* aumentado */
             border-radius: 12px;
             box-shadow: 0 4px 20px var(--shadow);
             border: 1px solid var(--border);
@@ -179,26 +165,14 @@
         }
 
         .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--text-primary);
         }
 
         .form-control {
             width: 100%;
             padding: 12px 16px;
-            border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-main);
-            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+            border: 1px solid var(--border);
         }
 
         .footer {
@@ -210,31 +184,11 @@
 
         .footer-bottom {
             text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .login-container {
-                padding: 1rem;
-            }
-
-            .login-card {
-                padding: 2rem;
-            }
+            opacity: 0.7;
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <header class="navbar">
@@ -243,14 +197,14 @@
                     <span class="logo-icon">📚</span>
                     bibliotec
                 </a>
-                
+
                 <nav class="nav-links">
                     <a href="index.php">Início</a>
                     <a href="categorias.php">Categorias</a>
                     <a href="sobre.php">Sobre</a>
                     <a href="login.php" class="active btn btn-secondary">Entrar</a>
                 </nav>
-                
+
                 <button class="btn btn-ghost mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -265,29 +219,36 @@
                             <h2 class="login-title">Acesse sua conta</h2>
                             <p class="login-subtitle">Entre para explorar nossa biblioteca</p>
                         </div>
-                        
+
                         <form id="loginForm">
                             <div class="form-group">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+                                <label class="form-label">E-mail</label>
+                                <input type="email" id="email" class="form-control" placeholder="seu@email.com">
                             </div>
-                            
+
                             <div class="form-group">
-                                <label for="password" class="form-label">Senha</label>
-                                <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+                                <label class="form-label">Senha</label>
+                                <input type="password" id="password" class="form-control" placeholder="Sua senha">
                             </div>
-                            
+
                             <button type="button" id="loginButton" class="btn btn-primary" style="width: 100%;">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Entrar
+                                <i class="fas fa-sign-in-alt"></i> Entrar
                             </button>
                         </form>
-                        
+
                         <div style="text-align: center; margin-top: 1.5rem;">
                             <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                                Não tem uma conta? <a href="#" style="color: var(--primary-main);">Cadastre-se</a>
+                                Não tem uma conta?
+                                <a href="cadastro.php" style="color: var(--primary-main);">Cadastre-se</a>
+                            </p>
+
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                                <a href="loginadm.php" style="color: var(--primary-main); font-weight: 600;">
+                                    Entrar como administrador
+                                </a>
                             </p>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -303,29 +264,18 @@
     </div>
 
     <script>
-        document.getElementById('loginButton').addEventListener('click', function() {
+        document.getElementById('loginButton').addEventListener('click', function () {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
+
             if (!email || !password) {
                 alert('Por favor, preencha todos os campos.');
                 return;
             }
-            
-            // Simulação de login - redireciona para a página de sucesso
+
             window.location.href = 'logado.php';
-        });
-
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('loginButton').click();
-            }
-        });
-
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
     </script>
 </body>
+
 </html>
