@@ -1,276 +1,127 @@
+<?php
+session_start();
+include 'includes/conexao.php';
+
+$erro = '';
+
+$codigo_admin = 'admin123';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+    $codigo = trim($_POST['codigo'] ?? '');
+    
+    if (empty($email) || empty($senha) || empty($codigo)) {
+        $erro = "Preencha todos os campos!";
+    } elseif ($codigo !== $codigo_admin) {
+        $erro = "Código de administrador incorreto!";
+    } else {
+        // Buscar usuário no banco
+        $stmt = $pdo->prepare("SELECT * FROM USUARIO WHERE email = ? AND tipo = 'admin'");
+        $stmt->execute([$email]);
+        $usuario = $stmt->fetch();
+        
+        if ($usuario && password_verify($senha, $usuario['senha'])) {
+            // Login bem-sucedido
+            $_SESSION['usuario_id'] = $usuario['id_usuario'];
+            $_SESSION['usuario_nome'] = $usuario['nome'];
+            $_SESSION['usuario_email'] = $usuario['email'];
+            $_SESSION['usuario_tipo'] = $usuario['tipo'];
+            
+            header("Location: admin/dashboard.php");
+            exit;
+        } else {
+            $erro = "Credenciais de administrador incorretas!";
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Login Administrador</title>
+    <title>Área Administrativa - Bibliotec</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="assets/css/estilo.css">
     <style>
-        :root {
-            --primary-dark: #1a1a1a;
-            --primary-main: #2C3E50;
-            --primary-light: #34495E;
-            --secondary-dark: #465c78;
-            --secondary-main: #7f8c8d;
-            --secondary-light: #95a5a6;
-            --background: #f8f9fa;
-            --surface: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #5d6d7e;
-            --text-muted: #7f8c8d;
-            --border: #e0e0e0;
-            --shadow: rgba(44, 62, 80, 0.1);
-            --shadow-hover: rgba(44, 62, 80, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            background-color: var(--background);
-            color: var(--text-primary);
-            font-weight: 400;
-        }
-
-        .app-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main {
-            flex: 1;
-            padding-top: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .admin-login-container {
+            max-width: 400px;
+            margin: 100px auto;
             padding: 0 20px;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Inter', sans-serif;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-main);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow-hover);
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: var(--surface);
-            box-shadow: 0 2px 12px var(--shadow);
-            z-index: 1000;
-            padding: 0;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-        }
-
-        .logo-icon {
-            color: var(--primary-main);
-            font-size: 1.75rem;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-primary);
-            font-weight: 500;
-            position: relative;
-            padding: 8px 0;
-        }
-
-        .nav-links a.active {
-            color: var(--primary-main);
-        }
-
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary-main);
-        }
-
-
-
-
-
-
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .login-card {
+        .admin-card {
             background: var(--surface);
             padding: 2.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 20px var(--shadow);
-            border: 1px solid var(--border);
-            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary-main);
+            position: relative;
         }
 
-        .login-header {
+        .admin-card::before {
+            content: '🔒';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-main);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+        }
+
+        .admin-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-title {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        .admin-title {
+            font-size: 1.5rem;
             color: var(--primary-dark);
-        }
-
-        .login-subtitle {
-            color: var(--text-secondary);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
             margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-primary);
         }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
+        .admin-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-main);
-            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        .security-notice {
+            background: var(--background);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
         }
 
-        .footer {
-            background-color: var(--primary-dark);
-            color: white;
-            padding: 3rem 0;
-            margin-top: auto;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: var(--surface);
-                box-shadow: 0 4px 12px var(--shadow);
-                padding: 1rem 0;
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .login-card {
-                padding: 2rem;
-            }
-
-            main {
-                padding: 100px 15px 40px;
-            }
+        .security-notice i {
+            color: var(--warning);
+            margin-right: 0.5rem;
         }
     </style>
 </head>
-
 <body>
     <div class="app-container">
         <header class="navbar">
             <div class="nav-container">
                 <a href="index.php" class="logo">
                     <span class="logo-icon">📚</span>
-                    bibliotec
+                    Bibliotec
                 </a>
-
+                
                 <nav class="nav-links">
                     <a href="index.php">Início</a>
                     <a href="categorias.php">Categorias</a>
                     <a href="sobre.php">Sobre</a>
-                    <a href="login.php" class="active btn btn-secondary">Entrar</a>
+                    <a href="login.php" class="btn btn-secondary">Entrar</a>
                 </nav>
-
+                
                 <button class="btn btn-ghost mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -279,41 +130,56 @@
 
         <main>
             <div class="container">
-                <div class="login-container">
-                    <div class="login-card">
-                        <div class="login-header">
-                            <h2 class="login-title">Área Administrativa</h2>
-                            <p class="login-subtitle">Somente administradores autorizados</p>
+                <div class="admin-login-container">
+                    <div class="admin-card">
+                        <div class="admin-header">
+                            <h2 class="admin-title">Área Administrativa</h2>
+                            <p class="admin-subtitle">Acesso restrito a administradores</p>
                         </div>
 
-                        <form id="adminLoginForm" method="POST">
+                        <?php if($erro): ?>
+                            <div class="alert alert-erro"><?= $erro ?></div>
+                        <?php endif; ?>
+
+                        <div class="security-notice">
+                            <i class="fas fa-shield-alt"></i>
+                            <strong>Acesso Restrito:</strong> Esta área é exclusiva para administradores do sistema.
+                        </div>
+
+                        <form method="POST" id="adminLoginForm">
                             <div class="form-group">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="admin@email.com" required>
+                                <label for="email" class="form-label">E-mail Administrativo</label>
+                                <input type="email" id="email" name="email" class="form-control" 
+                                       placeholder="admin@biblioteca.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="password" class="form-label">Senha</label>
-                                <input type="password" id="password" name="senha" class="form-control" placeholder="Sua senha" required>
+                                <label for="senha" class="form-label">Senha</label>
+                                <input type="password" id="senha" name="senha" class="form-control" 
+                                       placeholder="Sua senha" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="codigo" class="form-label">Código de Administrador</label>
-                                <input type="text" id="codigo" name="codigo" class="form-control" placeholder="Código secreto" required>
+                                <input type="password" id="codigo" name="codigo" class="form-control" 
+                                       placeholder="Código secreto" required>
+                                <small class="text-muted">Código fornecido apenas para administradores autorizados</small>
                             </div>
 
                             <button type="submit" class="btn btn-primary" style="width: 100%;">
                                 <i class="fas fa-sign-in-alt"></i>
-                                Entrar
+                                Acessar Painel
                             </button>
                         </form>
 
                         <div style="text-align: center; margin-top: 1.5rem;">
                             <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                                <a href="login.php" style="color: var(--primary-main);">← Voltar ao login normal</a>
+                                <a href="login.php" style="color: var(--primary-main);">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Voltar ao login normal
+                                </a>
                             </p>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -322,7 +188,7 @@
         <footer class="footer">
             <div class="container">
                 <div class="footer-bottom">
-                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+                    <p>&copy; 2025 Bibliotec. Todos os direitos reservados.</p>
                 </div>
             </div>
         </footer>
@@ -331,9 +197,18 @@
     <script>
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('show');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Validação do formulário
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            const codigo = document.getElementById('codigo').value;
+            if (codigo.length < 3) {
+                e.preventDefault();
+                alert('Por favor, insira um código válido.');
+                return false;
+            }
         });
     </script>
 </body>
-
 </html>

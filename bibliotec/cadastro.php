@@ -1,355 +1,136 @@
+<?php
+session_start();
+include 'includes/conexao.php';
+
+$erro = '';
+$sucesso = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = trim($_POST['nome'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['password'] ?? '';
+    $telefone = trim($_POST['telefone'] ?? '');
+    
+    // Validar dados
+    if (empty($nome) || empty($email) || empty($senha)) {
+        $erro = "Preencha todos os campos obrigatórios!";
+    } elseif (strlen($senha) < 6) {
+        $erro = "A senha deve ter no mínimo 6 caracteres!";
+    } else {
+        try {
+            // Verificar se email já existe
+            $stmt = $pdo->prepare("SELECT id_usuario FROM USUARIO WHERE email = ?");
+            $stmt->execute([$email]);
+            
+            if ($stmt->rowCount() > 0) {
+                $erro = "Este email já está cadastrado!";
+            } else {
+                // Inserir novo usuário
+                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+                
+                $stmt = $pdo->prepare("INSERT INTO USUARIO (nome, email, senha, telefone, tipo) VALUES (?, ?, ?, ?, 'usuario')");
+                $stmt->execute([$nome, $email, $senha_hash, $telefone]);
+                
+                $sucesso = "Cadastro realizado com sucesso!";
+                
+                // Redirecionar para login após 2 segundos
+                header("refresh:2;url=login.php");
+            }
+        } catch(PDOException $e) {
+            $erro = "Erro ao cadastrar: " . $e->getMessage();
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>bibliotec - Cadastro</title>
+    <title> Bibliotec - Cadastro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <style>
-        :root {
-            --primary-dark: #1a1a1a;
-            --primary-main: #2C3E50;
-            --primary-light: #34495E;
-            --secondary-dark: #465c78;
-            --secondary-main: #7f8c8d;
-            --secondary-light: #95a5a6;
-            --background: #f8f9fa;
-            --surface: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #5d6d7e;
-            --text-muted: #7f8c8d;
-            --border: #e0e0e0;
-            --shadow: rgba(44, 62, 80, 0.1);
-            --shadow-hover: rgba(44, 62, 80, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            background-color: var(--background);
-            font-weight: 400;
-        }
-
-        /* NAVBAR */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: var(--surface);
-            box-shadow: 0 2px 12px var(--shadow);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 1rem 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: absolute;
-            left: 20px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-        }
-
-        .logo-icon {
-            font-size: 1.7rem;
-            color: var(--primary-main);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            padding: 5px 0;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary-main);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            position: absolute;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                background-color: white;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                padding: 1rem 0;
-                box-shadow: 0 4px 12px var(--shadow);
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-        }
-
-        /* CONTEÚDO */
-        main {
-            margin-top: 120px;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .card {
-            background: white;
-            max-width: 450px;
-            width: 100%;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 1.3rem;
-        }
-
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            font-size: 1rem;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-main);
-            color: white;
-            font-weight: 600;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .helper {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .helper a {
-            color: var(--primary-main);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .error {
-            color: #c0392b;
-            font-size: 0.9rem;
-            margin-top: 4px;
-        }
-
-        .success {
-            color: #2ecc71;
-            text-align: center;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        /* FOOTER */
-        .footer {
-            background-color: var(--primary-dark);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 50px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            opacity: 0.8;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/estilo.css">
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="index.php" class="logo">
-                <span class="logo-icon">📚</span> bibliotec
-            </a>
-
-            <nav class="nav-links" id="menu">
-                <a href="index.php">Início</a>
-                <a href="categorias.php">Categorias</a>
-                <a href="sobre.php">Sobre</a>
-                <a href="login.php" class="active">Entrar</a>
-            </nav>
-
-            <button class="mobile-menu-btn" id="menuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main>
-        <div class="card">
-            <h1 class="title">Crie sua conta</h1>
-            <p class="subtitle">Cadastre-se para começar a explorar</p>
+        <div class="container">
+            <div class="card" style="max-width: 450px; margin: 2rem auto;">
+                <div class="card-body">
+                    <h1 class="text-center">Crie sua conta</h1>
+                    <p class="text-center text-muted">Cadastre-se para começar a explorar</p>
 
-            <form id="cadForm" novalidate>
-                <div class="form-group">
-                    <label class="form-label">Nome completo</label>
-                    <input type="text" id="nome" class="form-control">
-                    <div class="error" id="err-nome"></div>
+                    <?php if($erro): ?>
+                        <div class="alert alert-erro"><?= $erro ?></div>
+                    <?php endif; ?>
+                    
+                    <?php if($sucesso): ?>
+                        <div class="alert alert-sucesso"><?= $sucesso ?></div>
+                    <?php endif; ?>
+
+                    <form method="POST" id="cadForm">
+                        <div class="form-group">
+                            <label class="form-label">Nome completo *</label>
+                            <input type="text" name="nome" class="form-control" value="<?= htmlspecialchars($_POST['nome'] ?? '') ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">E-mail *</label>
+                            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" name="telefone" class="form-control" value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Senha *</label>
+                            <input type="password" name="password" class="form-control" required>
+                            <small class="text-muted">Mínimo 6 caracteres</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Confirmar senha *</label>
+                            <input type="password" name="password2" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Cadastrar</button>
+
+                        <p class="text-center mt-3">
+                            Já tem conta? <a href="login.php">Entrar</a>
+                        </p>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" id="email" class="form-control">
-                    <div class="error" id="err-email"></div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" id="password" class="form-control">
-                    <div class="error" id="err-password"></div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Confirmar senha</label>
-                    <input type="password" id="password2" class="form-control">
-                    <div class="error" id="err-password2"></div>
-                </div>
-
-                <button type="submit" class="btn">Cadastrar</button>
-
-                <div id="successMsg" class="success"></div>
-
-                <p class="helper">
-                    Já tem conta? <a href="login.php">Entrar</a>
-                </p>
-            </form>
+            </div>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-bottom">
-            © 2025 bibliotec. Todos os direitos reservados.
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const menu = document.getElementById('menu');
-
-        menuBtn.addEventListener('click', () => {
-            menu.classList.toggle('show');
-        });
-
         const form = document.getElementById('cadForm');
 
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            let ok = true;
-
-            const nome = document.getElementById('nome').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('password').value;
-            const pass2 = document.getElementById('password2').value;
-
-            document.querySelectorAll('.error').forEach(e => e.textContent = '');
-            document.getElementById('successMsg').textContent = '';
-
-            if (!nome) {
-                ok = false;
-                document.getElementById('err-nome').textContent = 'Preencha seu nome.';
-            }
-
-            if (!email) {
-                ok = false;
-                document.getElementById('err-email').textContent = 'Preencha seu e-mail.';
-            }
+            const pass = document.querySelector('input[name="password"]').value;
+            const pass2 = document.querySelector('input[name="password2"]').value;
 
             if (pass.length < 6) {
-                ok = false;
-                document.getElementById('err-password').textContent = 'A senha deve ter no mínimo 6 caracteres.';
+                e.preventDefault();
+                alert('A senha deve ter no mínimo 6 caracteres.');
+                return;
             }
 
             if (pass !== pass2) {
-                ok = false;
-                document.getElementById('err-password2').textContent = 'As senhas não coincidem.';
-            }
-
-            if (ok) {
-                document.getElementById('successMsg').textContent = 'Cadastro realizado com sucesso!';
-                setTimeout(() => {
-                    window.location.href = 'login.php';
-                }, 1200);
+                e.preventDefault();
+                alert('As senhas não coincidem.');
+                return;
             }
         });
     </script>
-
 </body>
 </html>

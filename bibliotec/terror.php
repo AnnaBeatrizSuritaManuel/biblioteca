@@ -1,389 +1,134 @@
+<?php
+session_start();
+include 'includes/conexao.php';
+
+// Buscar livros de terror do banco
+$livros_terror = $pdo->prepare("
+    SELECT * FROM LIVROS 
+    WHERE genero LIKE '%terror%' OR genero LIKE '%Terror%'
+    ORDER BY titulo
+");
+$livros_terror->execute();
+$livros = $livros_terror->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bibliotec - Terror</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Mesmo CSS base */
-        :root {
-            --primary-dark: #1a1a1a;
-            --primary-main: #2C3E50;
-            --primary-light: #34495E;
-            --secondary-dark: #465c78;
-            --secondary-main: #7f8c8d;
-            --secondary-light: #95a5a6;
-            --background: #f8f9fa;
-            --surface: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #5d6d7e;
-            --text-muted: #7f8c8d;
-            --border: #e0e0e0;
-            --shadow: rgba(44, 62, 80, 0.1);
-            --shadow-hover: rgba(44, 62, 80, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            background-color: var(--background);
-            color: var(--text-primary);
-            font-weight: 400;
-        }
-
-        .app-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main {
-            flex: 1;
-            padding-top: 80px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Inter', sans-serif;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-main);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow-hover);
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: var(--surface);
-            box-shadow: 0 2px 12px var(--shadow);
-            z-index: 1000;
-            padding: 0;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-        }
-
-        .logo-icon {
-            color: var(--primary-main);
-            font-size: 1.75rem;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-primary);
-            font-weight: 500;
-            position: relative;
-            padding: 8px 0;
-        }
-
-        .nav-links a.active {
-            color: var(--primary-main);
-        }
-
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary-main);
-        }
-
-        .section {
-            padding: 4rem 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .section-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-
-        .card {
-            background-color: var(--surface);
-            border-radius: 12px;
-            box-shadow: 0 2px 8px var(--shadow);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px var(--shadow-hover);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer {
-            background-color: var(--primary-dark);
-            color: white;
-            padding: 3rem 0;
-            margin-top: auto;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--surface);
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            margin: 0;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-        }
-    </style>
+    <title>Terror - Bibliotec </title>
+    <link rel="stylesheet" href="assets/css/estilo.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="navbar">
-            <div class="nav-container">
-                <a href="index.php" class="logo">
-                    <span class="logo-icon">📚</span>
-                    bibliotec
-                </a>
-                
-                <nav class="nav-links">
-                    <a href="index.php">Início</a>
-                    <a href="categorias.php">Categorias</a>
-                    <a href="sobre.php">Sobre</a>
-                    <a href="login.php" class="btn btn-secondary">Entrar</a>
-                </nav>
-                
-                <button class="btn btn-ghost mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </header>
+    <?php include 'includes/header.php'; ?>
 
-        <main>
-            <section class="section">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="section-title">Livros de Terror</h2>
-                        <p class="section-subtitle">Explore nossas histórias mais arrepiantes e sobrenaturais</p>
-                    </div>
-                    
-                    <div class="grid grid-3">
-                        <!-- Livro 1 -->
-                        <div class="card">
-                            <img src="img/oexorcista.png" alt="O Exorcista" class="card-img">
-                            <div class="card-body">
-                                <h3 class="card-title">O Exorcista</h3>
-                                <p class="card-text">William Peter Blatty</p>
-                                <p class="card-text">Terror Sobrenatural • 1971</p>
-                                <div class="mt-3">
-                                    <button class="btn btn-primary" onclick="openBookModal('terror1')">Ver Detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Livro 2 -->
-                        <div class="card">
-                            <img src="./img/it.png" alt="It: A Coisa" class="card-img">
-                            <div class="card-body">
-                                <h3 class="card-title">It: A Coisa</h3>
-                                <p class="card-text">Stephen King</p>
-                                <p class="card-text">Terror Psicológico • 1986</p>
-                                <div class="mt-3">
-                                    <button class="btn btn-primary" onclick="openBookModal('terror2')">Ver Detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Livro 3 -->
-                        <div class="card">
-                            <img src="./img/dracula.png" alt="Drácula" class="card-img">
-                            <div class="card-body">
-                                <h3 class="card-title">Drácula</h3>
-                                <p class="card-text">Bram Stoker</p>
-                                <p class="card-text">Terror Gótico • 1897</p>
-                                <div class="mt-3">
-                                    <button class="btn btn-primary" onclick="openBookModal('terror3')">Ver Detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Livro 4 -->
-                        <div class="card">
-                            <img src="img/bird.png" alt="Bird Box" class="card-img">
-                            <div class="card-body">
-                                <h3 class="card-title">Bird Box</h3>
-                                <p class="card-text">Josh Malerman</p>
-                                <p class="card-text">Terror Psicológico • 2014</p>
-                                <div class="mt-3">
-                                    <button class="btn btn-primary" onclick="openBookModal('terror4')">Ver Detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="footer">
+    <main>
+        <section class="section">
             <div class="container">
-                <div class="footer-bottom">
-                    <p>&copy; 2025 bibliotec. Todos os direitos reservados.</p>
+                <div class="section-header">
+                    <h2 class="section-title">Livros de Terror</h2>
+                    <p class="section-subtitle">Explore nossas histórias mais arrepiantes e sobrenaturais</p>
+                </div>
+                
+                <?php if(empty($livros)): ?>
+                    <div class="text-center" style="padding: 3rem;">
+                        <i class="fas fa-ghost" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-secondary);">Nenhum livro de terror cadastrado ainda.</p>
+                        <?php if(isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] == 'admin'): ?>
+                            <a href="admin/livros.php" class="btn btn-primary mt-2">Cadastrar Livros de Terror</a>
+                        <?php endif; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="grid grid-3">
+                        <?php foreach($livros as $livro): ?>
+                     <div class="card">
+                         <?php if($livro['imagem_url']): ?>
+                           <img src="<?= $livro['imagem_url'] ?>" alt="<?= $livro['titulo'] ?>" class="card-img">
+                         <?php else: ?>
+                          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+" 
+                           alt="Sem imagem" class="card-img">
+                       <?php endif; ?>
+                    <div class="card-body"></div>
+                        <div class="card">
+                            <img src="img/<?= $livro['titulo'] ?>.jpg" alt="<?= $livro['titulo'] ?>" class="card-img"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+OuiBUZXJyb3I8L3RzcGFuPjwvdGV4dD48L3N2Zz4='">
+                            <div class="card-body">
+                                <h3 class="card-title"><?= htmlspecialchars($livro['titulo']) ?></h3>
+                                <p class="card-text"><?= htmlspecialchars($livro['autor']) ?></p>
+                                <p class="card-text">
+                                    <span class="badge badge-primary"><?= htmlspecialchars($livro['genero']) ?></span>
+                                    <small>• <?= $livro['ano_publicado'] ?></small>
+                                </p>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary btn-small" onclick="openBookModal(<?= $livro['id_livro'] ?>)">
+                                        Ver Detalhes
+                                    </button>
+                                    <?php if(isset($_SESSION['usuario_id'])): ?>
+                                        <button class="btn btn-outline btn-small favorite-btn" data-livro="<?= $livro['id_livro'] ?>">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn btn-outline btn-small cart-btn" data-livro="<?= $livro['id_livro'] ?>">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <!-- Sobre o Gênero -->
+        <section class="section" style="background: var(--background);">
+            <div class="container">
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Sobre o Gênero Terror</h3>
+                        <p>O terror é um gênero literário que busca provocar medo, susto ou horror no leitor. Desde os clássicos góticos até as histórias contemporâneas, o terror explora nossos medos mais profundos.</p>
+                        <p><strong>Características principais:</strong></p>
+                        <ul>
+                            <li>Elementos sobrenaturais e paranormais</li>
+                            <li>Suspense psicológico</li>
+                            <li>Ambientação atmosférica e sombria</li>
+                            <li>Exploração de medos humanos universais</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Autores Clássicos</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Stephen King</h4>
+                                <p>O "Rei do Terror" moderno, autor de clássicos como "It - A Coisa" e "O Iluminado".</p>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <h4>H.P. Lovecraft</h4>
+                                <p>Criador do horror cósmico e dos Mitos de Cthulhu.</p>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <h4>Edgar Allan Poe</h4>
+                                <p>Pioneiro do conto de terror psicológico e do suspense.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </footer>
-    </div>
+        </section>
+    </main>
+
+    <?php include 'includes/footer.php'; ?>
 
     <!-- Modal de Detalhes do Livro -->
     <div id="bookModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalBookTitle">Detalhes do Livro</h3>
+                <h3 class="modal-title">Detalhes do Livro</h3>
                 <button class="modal-close" onclick="closeBookModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -395,89 +140,85 @@
     </div>
 
     <script>
-        function openBookModal(bookId) {
-            const books = {
-                terror1: {
-                    title: "O Exorcista",
-                    author: "William Peter Blatty",
-                    description: "Inspirado em um caso real, o livro conta a história de uma menina possuída por uma entidade demoníaca e dos esforços de dois padres para realizar um exorcismo. É uma narrativa intensa, explorando medo, fé e possessão.",
-                    genre: "Terror Sobrenatural",
-                    year: "1971",
-                    price: "R$ 39,90",
-                    pages: "340 páginas"
-                },
-                terror2: {
-                    title: "It: A Coisa",
-                    author: "Stephen King",
-                    description: "Uma história que alterna entre passado e presente, acompanhando um grupo de amigos que enfrenta uma entidade maléfica chamada 'Pennywise', que se manifesta como um palhaço para aterrorizar crianças na cidade de Derry.",
-                    genre: "Terror Psicológico",
-                    year: "1986",
-                    price: "R$ 49,90",
-                    pages: "1104 páginas"
-                },
-                terror3: {
-                    title: "Drácula",
-                    author: "Bram Stoker",
-                    description: "Um clássico da literatura, conta a história do Conde Drácula e sua tentativa de expandir sua influência vampírica para a Inglaterra. É narrado em forma de diários, cartas e relatos, criando um clima envolvente e perturbador.",
-                    genre: "Terror Gótico",
-                    year: "1897",
-                    price: "R$ 29,90",
-                    pages: "418 páginas"
-                },
-                terror4: {
-                    title: "Bird Box",
-                    author: "Josh Malerman",
-                    description: "Em um mundo apocalíptico, uma força misteriosa leva as pessoas à loucura ao serem vistas. A protagonista vive em constante medo e precisa sobreviver vendada junto com seus filhos para escapar da ameaça invisível.",
-                    genre: "Terror Psicológico",
-                    year: "2014",
-                    price: "R$ 34,90",
-                    pages: "272 páginas"
-                }
-            };
-            
-            const book = books[bookId];
-            if (book) {
-                document.getElementById('modalBookTitle').textContent = book.title;
-                document.getElementById('modalBookContent').innerHTML = `
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <img src="img/${book.title.toLowerCase().replace(/ /g, '_')}.jpg" alt="${book.title}" style="width: 100%; border-radius: 8px;">
+        // Funções do Modal
+        function openBookModal(livroId) {
+            // Em uma implementação real, você buscaria os dados do livro via AJAX
+            const modalContent = `
+                <div style="text-align: center; padding: 1rem;">
+                    <i class="fas fa-ghost" style="font-size: 4rem; color: var(--primary-main); margin-bottom: 1rem;"></i>
+                    <h4>Detalhes do Livro de Terror</h4>
+                    <p>ID do livro: ${livroId}</p>
+                    <p>Em uma implementação completa, aqui viriam os detalhes completos do livro buscados do banco de dados.</p>
+                    <div class="grid grid-2" style="margin: 1.5rem 0;">
+                        <div class="text-left">
+                            <p><strong>Autor:</strong> A ser carregado</p>
+                            <p><strong>Ano:</strong> A ser carregado</p>
+                            <p><strong>Páginas:</strong> A ser carregado</p>
                         </div>
-                        <div>
-                            <h4>${book.title}</h4>
-                            <p><strong>Autor:</strong> ${book.author}</p>
-                            <p><strong>Gênero:</strong> ${book.genre}</p>
-                            <p><strong>Ano:</strong> ${book.year}</p>
-                            <p><strong>Páginas:</strong> ${book.pages}</p>
-                            <p><strong>Preço:</strong> ${book.price}</p>
+                        <div class="text-left">
+                            <p><strong>Editora:</strong> A ser carregado</p>
+                            <p><strong>Gênero:</strong> Terror</p>
+                            <p><strong>Preço:</strong> R$ 39,90</p>
                         </div>
-                    </div>
-                    <div>
-                        <h5>Sinopse</h5>
-                        <p>${book.description}</p>
                     </div>
                     <div style="margin-top: 1.5rem;">
-                        <button class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-shopping-cart"></i>
-                            Adicionar ao Carrinho
-                        </button>
+                        <button class="btn btn-primary">Adicionar ao Carrinho</button>
+                        <button class="btn btn-outline" onclick="closeBookModal()">Fechar</button>
                     </div>
-                `;
-                document.getElementById('bookModal').classList.add('active');
-            }
+                </div>
+            `;
+            
+            document.getElementById('modalBookContent').innerHTML = modalContent;
+            document.getElementById('bookModal').classList.add('active');
         }
 
         function closeBookModal() {
             document.getElementById('bookModal').classList.remove('active');
         }
 
+        // Fechar modal ao clicar fora
         document.getElementById('bookModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeBookModal();
             }
         });
 
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+        // Favoritar livro
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const livroId = this.getAttribute('data-livro');
+                const icon = this.querySelector('i');
+                
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.style.color = 'var(--error)';
+                    // Aqui você faria uma requisição AJAX para adicionar aos favoritos
+                    console.log(`Adicionar livro ${livroId} aos favoritos`);
+                    alert('Livro adicionado aos favoritos!');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.style.color = '';
+                    // Aqui você faria uma requisição AJAX para remover dos favoritos
+                    console.log(`Remover livro ${livroId} dos favoritos`);
+                    alert('Livro removido dos favoritos!');
+                }
+            });
+        });
+
+        // Adicionar ao carrinho
+        document.querySelectorAll('.cart-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const livroId = this.getAttribute('data-livro');
+                // Aqui você faria uma requisição AJAX para adicionar ao carrinho
+                console.log(`Adicionar livro ${livroId} ao carrinho`);
+                alert('Livro adicionado ao carrinho!');
+            });
+        });
+
+        // Menu mobile
+        document.querySelector('.mobile-menu-btn')?.addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
