@@ -218,14 +218,15 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
     <div class="container">
         <div class="admin-actions">
             <h1>Gerenciar Livros</h1>
-    <div style="display: flex; gap: 1rem;">
-        <a href="../index.php" class="btn btn-outline">
-            <i class="fas fa-globe"></i> Site Principal
-        </a>
-        <a href="dashboard.php" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
-        </a>
-    </div>
+            <div style="display: flex; gap: 1rem;">
+                <a href="../index.php" class="btn btn-outline">
+                    <i class="fas fa-globe"></i> Site Principal
+                </a>
+                <a href="dashboard.php" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
 
         <!-- Formulário de Cadastro -->
         <div class="form-container">
@@ -344,7 +345,7 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
                                 </button>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="excluir_livro" value="1">
-                                    <input type="hidden" name="id_livro" value="<?= $livro['id_livro'] ?>">
+                                    <input type="                                    <input type="hidden" name="id_livro" value="<?= $livro['id_livro'] ?>">
                                     <button type="submit" class="btn btn-small btn-danger" 
                                             onclick="return confirm('Tem certeza que deseja excluir este livro?')">
                                         <i class="fas fa-trash"></i>

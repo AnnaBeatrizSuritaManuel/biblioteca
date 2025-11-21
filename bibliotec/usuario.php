@@ -65,7 +65,7 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - bibliotec</title>
+    <title>Meu Perfil - Bibliotec</title>
     <link rel="stylesheet" href="assets/css/estilo.css">
     <style>
         .profile-avatar {
@@ -332,8 +332,11 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                 <div class="grid grid-3">
                                     <?php foreach($favoritos as $livro): ?>
                                     <div class="card">
-                                        <img src="img/<?= $livro['titulo'] ?>.jpg" alt="<?= $livro['titulo'] ?>" class="card-img" 
-                                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+'">
+                                        <?php if($livro['imagem_url']): ?>
+                                            <img src="<?= $livro['imagem_url'] ?>" alt="<?= $livro['titulo'] ?>" class="card-img">
+                                        <?php else: ?>
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+" alt="Sem imagem" class="card-img">
+                                        <?php endif; ?>
                                         <div class="card-body">
                                             <h3 class="card-title"><?= htmlspecialchars($livro['titulo']) ?></h3>
                                             <p class="card-text"><?= htmlspecialchars($livro['autor']) ?></p>
@@ -352,14 +355,6 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                 </div>
                             <?php endif; ?>
                         </div>
-                    <!-- Em usuario.php, nas seções de favoritos e carrinho -->
-                     <?php if($item['imagem_url']): ?>
-                         <img src="<?= $item['imagem_url'] ?>" alt="<?= $item['titulo'] ?>" class="carrinho-img">
-                       <?php else: ?>
-                        <div class="carrinho-img" style="background: var(--background); display: flex; align-items: center; justify-content: center;">
-                         <i class="fas fa-book" style="color: var(--text-muted);"></i>
-                       </div>
-                   <?php endif; ?>
 
                         <!-- Carrinho -->
                         <div id="carrinho" class="tab-content">
@@ -380,8 +375,13 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                         $total += $subtotal;
                                     ?>
                                     <div class="carrinho-item">
-                                        <img src="img/<?= $item['titulo'] ?>.jpg" alt="<?= $item['titulo'] ?>" class="carrinho-img"
-                                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmOGNlMTMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMmMzODEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj48dHNwYW4geD0iNTAlIiB5PSI1MCUiPsKeSuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+'">
+                                        <?php if($item['imagem_url']): ?>
+                                            <img src="<?= $item['imagem_url'] ?>" alt="<?= $item['titulo'] ?>" class="carrinho-img">
+                                        <?php else: ?>
+                                            <div class="carrinho-img" style="background: var(--background); display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-book" style="color: var(--text-muted);"></i>
+                                            </div>
+                                        <?php endif; ?>
                                         <div class="carrinho-info">
                                             <h4><?= htmlspecialchars($item['titulo']) ?></h4>
                                             <p><?= htmlspecialchars($item['autor']) ?></p>
@@ -467,7 +467,6 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
     <script>
         document.querySelectorAll('.nav-pill').forEach(pill => {
             pill.addEventListener('click', function() {
-
                 document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
                 

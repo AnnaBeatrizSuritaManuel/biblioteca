@@ -6,7 +6,7 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <h4>Bibliotec</h4>
-                        <p> biblioteca com a parceria da Etec maria cristina medeiros onde mostremos livros famosos para abrir sua imaginação</p>
+                        <p>Biblioteca com a parceria da Etec Maria Cristina Medeiros onde mostramos livros famosos para abrir sua imaginação</p>
                     </div>
                     
                     <div class="footer-section">

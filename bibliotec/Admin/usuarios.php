@@ -26,6 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
     header("Location: usuarios.php");
     exit;
 }
+
+// Estatísticas
+$total_usuarios = count($usuarios);
+$total_admins = $pdo->query("SELECT COUNT(*) FROM USUARIO WHERE tipo = 'admin'")->fetchColumn();
+$total_usuarios_comuns = $total_usuarios - $total_admins;
+$novos_usuarios = $pdo->query("SELECT COUNT(*) FROM USUARIO WHERE data_cadastro >= DATE_SUB(NOW(), INTERVAL 7 DAY)")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary-main);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         .table-container {
@@ -119,6 +130,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
             padding: 0.5rem 0.75rem;
             font-size: 0.8rem;
         }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-main) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -126,38 +150,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
     
     <div class="container">
         <div class="admin-actions">
-             <h1>Gerenciar Usuarios</h1>
-    <div style="display: flex; gap: 1rem;">
-        <a href="../index.php" class="btn btn-outline">
-            <i class="fas fa-globe"></i> Site Principal
-        </a>
-        <a href="dashboard.php" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
-        </a>
-    </div>
-        <?php
-        $total_usuarios = count($usuarios);
-        $total_admins = $pdo->query("SELECT COUNT(*) FROM USUARIO WHERE tipo = 'admin'")->fetchColumn();
-        $total_usuarios_comuns = $total_usuarios - $total_admins;
-        $novos_usuarios = $pdo->query("SELECT COUNT(*) FROM USUARIO WHERE data_cadastro >= DATE_SUB(NOW(), INTERVAL 7 DAY)")->fetchColumn();
-        ?>
+            <h1>Gerenciar Usuários</h1>
+            <div style="display: flex; gap: 1rem;">
+                <a href="../index.php" class="btn btn-outline">
+                    <i class="fas fa-globe"></i> Site Principal
+                </a>
+                <a href="dashboard.php" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
         
         <div class="stats-cards">
             <div class="stat-card">
                 <div class="stat-number"><?= $total_usuarios ?></div>
-                <div>Total de Usuários</div>
+                <div class="stat-label">Total de Usuários</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?= $total_admins ?></div>
-                <div>Administradores</div>
+                <div class="stat-label">Administradores</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?= $total_usuarios_comuns ?></div>
-                <div>Usuários Comuns</div>
+                <div class="stat-label">Usuários Comuns</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?= $novos_usuarios ?></div>
-                <div>Novos (7 dias)</div>
+                <div class="stat-label">Novos (7 dias)</div>
             </div>
         </div>
 
@@ -174,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Avatar</th>
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Tipo</th>
@@ -184,9 +203,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_usuario'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($usuarios as $usuario): ?>
+                        <?php foreach($usuarios as $usuario): 
+                            $iniciais = substr($usuario['nome'], 0, 2);
+                        ?>
                         <tr>
-                            <td><?= $usuario['id_usuario'] ?></td>
+                            <td>
+                                <div class="user-avatar">
+                                    <?= strtoupper($iniciais) ?>
+                                </div>
+                            </td>
                             <td>
                                 <strong><?= htmlspecialchars($usuario['nome']) ?></strong>
                                 <?php if($usuario['id_usuario'] == $_SESSION['usuario_id']): ?>

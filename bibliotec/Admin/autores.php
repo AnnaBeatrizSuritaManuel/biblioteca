@@ -169,15 +169,17 @@ $autores_com_livros = $pdo->query("
     
     <div class="container">
         <div class="admin-actions">
-      <h1>Gerenciar Autores</h1>
-    <div style="display: flex; gap: 1rem;">
-        <a href="../index.php" class="btn btn-outline">
-            <i class="fas fa-globe"></i> Site Principal
-        </a>
-        <a href="dashboard.php" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
-        </a>
-    </div>
+            <h1>Gerenciar Autores</h1>
+            <div style="display: flex; gap: 1rem;">
+                <a href="../index.php" class="btn btn-outline">
+                    <i class="fas fa-globe"></i> Site Principal
+                </a>
+                <a href="dashboard.php" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+
         <div class="stats-cards">
             <div class="stat-card">
                 <div class="stat-number"><?= $total_autores ?></div>
@@ -304,7 +306,6 @@ $autores_com_livros = $pdo->query("
     <script>
         function editarAutor(autorId) {
             alert(`Funcionalidade de edição para o autor ID: ${autorId}\nEm uma implementação completa, aqui abriria um modal de edição.`);
-            // Em uma implementação completa, você abriria um modal para editar o autor
         }
 
         // Validação do formulário
