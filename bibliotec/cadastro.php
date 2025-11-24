@@ -75,17 +75,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form method="POST" id="cadForm">
                         <div class="form-group">
                             <label class="form-label">Nome completo *</label>
-                            <input type="text" name="nome" class="form-control" value="<?= htmlspecialchars($_POST['nome'] ?? '') ?>" required>
+                            <input type="text" name="nome" class="form-control" placeholder="Digite seu Nome" value="<?= htmlspecialchars($_POST['nome'] ?? '') ?>" required>
+                         <small class="text-muted">Minimo 3 caracteres</small>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">E-mail *</label>
-                            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+                            <input type="email" name="email" class="form-control" placeholder="example@gmail.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Telefone</label>
-                            <input type="tel" name="telefone" class="form-control" value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>">
+                            <input type="tel" name="telefone" class="form-control" placeholder="(11) 99999-9999" oninput="this.value = this.value.replace(/\D/g, '')"> value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>">
                         </div>
 
                         <div class="form-group">

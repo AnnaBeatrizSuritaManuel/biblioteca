@@ -157,3 +157,22 @@ document.addEventListener('click', function(e) {
         closeModal(e.target.id);
     }
 });
+
+document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('blur', function() {
+        if (!this.value.trim() && this.hasAttribute('required')) {
+            this.style.borderColor = 'var(--error)';
+            this.parentElement.querySelector('.error-message')?.remove();
+            const error = document.createElement('div');
+            error.className = 'error-message';
+            error.style.color = 'var(--error)';
+            error.style.fontSize = '0.8rem';
+            error.style.marginTop = '0.25rem';
+            error.textContent = 'Este campo é obrigatório';
+            this.parentElement.appendChild(error);
+        } else {
+            this.style.borderColor = '';
+            this.parentElement.querySelector('.error-message')?.remove();
+        }
+    });
+});
