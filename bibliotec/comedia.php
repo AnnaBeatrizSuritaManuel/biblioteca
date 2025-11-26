@@ -1,17 +1,32 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/functions.php'; // Adicione esta linha
 
-// Buscar livros de comédia do banco
-$livros_comedia = $pdo->prepare("
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%comédia%' OR genero LIKE '%comedia%' OR genero LIKE '%humor%' OR genero LIKE '%Humor%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_comedia->execute();
-$livros = $livros_comedia->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
 
+<!-- No loop, use: -->
+<div class="grid grid-3">
+    <?php foreach($livros as $livro): ?>
+    <div class="card">
+        <img src="<?= getImagemLivro($livro['imagem_url']) ?>" 
+             alt="<?= htmlspecialchars($livro['titulo']) ?>" 
+             class="card-img"
+             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1ACUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+'">
+        <div class="card-body">
+            <!-- resto do código -->
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

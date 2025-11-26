@@ -50,9 +50,10 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
     $nome = trim($_POST['nome']);
     $telefone = trim($_POST['telefone']);
     $biografia = trim($_POST['biografia']);
+    $etec_estudante = isset($_POST['etec_estudante']) ? 1 : 0;
     
-    $stmt_update = $pdo->prepare("UPDATE USUARIO SET nome = ?, telefone = ?, biografia = ? WHERE id_usuario = ?");
-    $stmt_update->execute([$nome, $telefone, $biografia, $usuario_id]);
+    $stmt_update = $pdo->prepare("UPDATE USUARIO SET nome = ?, telefone = ?, biografia = ?, etec_estudante = ? WHERE id_usuario = ?");
+    $stmt_update->execute([$nome, $telefone, $biografia, $etec_estudante, $usuario_id]);
     
     $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
     header("Location: usuario.php");
@@ -219,6 +220,30 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
             font-weight: 600;
         }
 
+        .favorite-count {
+            margin-left: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            cursor: pointer;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            transition: all 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
         @media (max-width: 768px) {
             .profile-grid {
                 grid-template-columns: 1fr;
@@ -246,6 +271,9 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                     <p class="profile-info">
                         <?= htmlspecialchars($usuario['email']) ?> • 
                         Membro desde: <?= date('d/m/Y', strtotime($usuario['data_cadastro'])) ?>
+                        <?php if($usuario['etec_estudante']): ?>
+                            • 🎓 Estudante ETEC
+                        <?php endif; ?>
                     </p>
                 </div>
 
@@ -271,6 +299,12 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                     <i class="fas fa-shopping-cart"></i> Carrinho
                                 </span>
                                 <span class="badge"><?= count($carrinho) ?></span>
+                            </button>
+
+                            <button class="nav-pill" data-tab="beneficios">
+                                <span style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-gift"></i> Benefícios
+                                </span>
                             </button>
                             
                             <button class="nav-pill" data-tab="historico">
@@ -309,6 +343,12 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                     <div class="info-label">Tipo de Conta</div>
                                     <div class="info-value"><?= $usuario['tipo'] == 'admin' ? 'Administrador' : 'Usuário' ?></div>
                                 </div>
+                                <?php if($usuario['etec_estudante']): ?>
+                                <div class="info-item" style="border-left-color: var(--success);">
+                                    <div class="info-label">Status Estudante</div>
+                                    <div class="info-value">🎓 Estudante da ETEC - Empréstimos gratuitos!</div>
+                                </div>
+                                <?php endif; ?>
                             </div>
                             
                             <?php if(!empty($usuario['biografia'])): ?>
@@ -330,7 +370,12 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                 </div>
                             <?php else: ?>
                                 <div class="grid grid-3">
-                                    <?php foreach($favoritos as $livro): ?>
+                                    <?php foreach($favoritos as $livro): 
+                                        // Buscar contagem de favoritos
+                                        $stmt_fav_count = $pdo->prepare("SELECT COUNT(*) as total_favoritos FROM favoritos WHERE id_livro = ?");
+                                        $stmt_fav_count->execute([$livro['id_livro']]);
+                                        $total_favoritos = $stmt_fav_count->fetchColumn();
+                                    ?>
                                     <div class="card">
                                         <?php if($livro['imagem_url']): ?>
                                             <img src="<?= $livro['imagem_url'] ?>" alt="<?= $livro['titulo'] ?>" class="card-img">
@@ -345,8 +390,9 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                                 <button class="btn btn-primary btn-small" onclick="openBookModal(<?= $livro['id_livro'] ?>)">
                                                     Ver Detalhes
                                                 </button>
-                                                <button class="btn btn-outline btn-small remove-favorito" data-livro="<?= $livro['id_livro'] ?>">
-                                                    <i class="fas fa-heart-broken"></i> Remover
+                                                <button class="btn btn-outline btn-small favorite-btn active" data-livro="<?= $livro['id_livro'] ?>">
+                                                    <i class="fas fa-heart"></i>
+                                                    <span class="favorite-count"><?= $total_favoritos ?></span>
                                                 </button>
                                             </div>
                                         </div>
@@ -369,6 +415,13 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                 <div class="carrinho-lista">
                                     <?php 
                                     $total = 0;
+                                    $desconto = 0;
+                                    $primeira_compra = count($emprestimos) == 0 && count($carrinho) > 0;
+                                    
+                                    if ($primeira_compra) {
+                                        $desconto = 0.15; // 15% desconto primeira compra
+                                    }
+                                    
                                     foreach($carrinho as $item): 
                                         $preco = 39.90;
                                         $subtotal = $item['quantidade'] * $preco;
@@ -399,19 +452,66 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                     <?php endforeach; ?>
                                     
                                     <div class="carrinho-total">
-                                        <strong style="font-size: 1.2rem;">Total: R$ <?= number_format($total, 2) ?></strong>
+                                        <div>
+                                            <strong style="font-size: 1.2rem;">Total: R$ <?= number_format($total, 2) ?></strong>
+                                            <?php if($primeira_compra): ?>
+                                                <div style="color: var(--success); font-weight: 600;">
+                                                    🎉 15% de desconto na primeira compra!
+                                                </div>
+                                                <div style="color: var(--success);">
+                                                    Total com desconto: R$ <?= number_format($total * (1 - $desconto), 2) ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
                                         <button class="btn btn-primary">Finalizar Compra</button>
                                     </div>
                                 </div>
                             <?php endif; ?>
                         </div>
 
+                        <!-- Benefícios -->
+                        <div id="beneficios" class="tab-content">
+                            <h2>Meus Benefícios</h2>
+                            <div class="info-grid">
+                                <div class="info-item" style="border-left-color: var(--success);">
+                                    <div class="info-label">🎓 Desconto Estudante</div>
+                                    <div class="info-value">
+                                        <?php if($usuario['etec_estudante']): ?>
+                                            ✅ Você tem 100% de desconto em todos os empréstimos!
+                                        <?php else: ?>
+                                            Marque "Sou estudante da ETEC" nas configurações para ativar
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="info-item" style="border-left-color: var(--primary-main);">
+                                    <div class="info-label">⭐ Sistema de Avaliação</div>
+                                    <div class="info-value">Avalie livros e deixe comentários nos detalhes de cada livro</div>
+                                </div>
+                                <div class="info-item" style="border-left-color: var(--warning);">
+                                    <div class="info-label">💝 Primeira Compra</div>
+                                    <div class="info-value">
+                                        <?php if(count($emprestimos) == 0 && count($carrinho) > 0): ?>
+                                            ✅ 15% de desconto ativo na sua primeira compra!
+                                        <?php else: ?>
+                                            15% de desconto na primeira compra (apenas para novos usuários)
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="info-item" style="border-left-color: var(--info);">
+                                    <div class="info-label">❤️ Sistema de Favoritos</div>
+                                    <div class="info-value">Adicione livros aos favoritos e veja quantas pessoas também gostaram</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Histórico -->
                         <div id="historico" class="tab-content">
                             <h2>Histórico de Empréstimos</h2>
                             <?php if(empty($emprestimos)): ?>
                                 <div class="text-center" style="padding: 3rem;">
                                     <i class="fas fa-history" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
                                     <p style="color: var(--text-secondary);">Nenhum empréstimo registrado.</p>
+                                    <a href="categorias.php" class="btn btn-primary mt-2">Explorar Livros</a>
                                 </div>
                             <?php else: ?>
                                 <div class="info-grid">
@@ -422,7 +522,12 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                                         <div style="margin-top: 0.5rem;">
                                             <small>
                                                 Emprestado em: <?= date('d/m/Y', strtotime($emp['data_emprestimo'])) ?><br>
-                                                Devolução: <?= date('d/m/Y', strtotime($emp['data_entrega_prevista'])) ?>
+                                                Devolução: <?= date('d/m/Y', strtotime($emp['data_entrega_prevista'])) ?><br>
+                                                <?php if(isset($emp['data_devolucao_real']) && $emp['data_devolucao_real']): ?>
+                                                    <span style="color: var(--success);">✅ Devolvido em: <?= date('d/m/Y', strtotime($emp['data_devolucao_real'])) ?></span>
+                                                <?php else: ?>
+                                                    <span style="color: var(--warning);">⏳ Em andamento</span>
+                                                <?php endif; ?>
                                             </small>
                                         </div>
                                     </div>
@@ -431,19 +536,28 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                             <?php endif; ?>
                         </div>
 
+                        <!-- Configurações -->
                         <div id="config" class="tab-content">
                             <h2>Editar Perfil</h2>
                             <form method="POST">
                                 <input type="hidden" name="atualizar_perfil" value="1">
                                 
                                 <div class="form-group">
-                                    <label class="form-label">Nome Completo</label>
+                                    <label class="form-label">Nome Completo *</label>
                                     <input type="text" name="nome" class="form-control" value="<?= htmlspecialchars($usuario['nome']) ?>" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label class="form-label">Telefone</label>
-                                    <input type="tel" name="telefone" class="form-control" value="<?= htmlspecialchars($usuario['telefone'] ?? '') ?>">
+                                    <input type="tel" name="telefone" class="form-control" value="<?= htmlspecialchars($usuario['telefone'] ?? '') ?>" placeholder="(11) 99999-9999">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" name="etec_estudante" value="1" <?= $usuario['etec_estudante'] ? 'checked' : '' ?>> 
+                                        Sou estudante da ETEC Maria Cristina Medeiros
+                                    </label>
+                                    <small class="text-muted">✅ Empréstimos gratuitos para estudantes!</small>
                                 </div>
                                 
                                 <div class="form-group">
@@ -482,6 +596,7 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                 const quantidade = this.value;
                 
                 console.log(`Atualizar item ${itemId} para quantidade ${quantidade}`);
+                // Aqui você faria uma requisição AJAX para atualizar
             });
         });
 
@@ -491,22 +606,91 @@ if ($_POST && isset($_POST['atualizar_perfil'])) {
                 if (confirm('Tem certeza que deseja remover este item do carrinho?')) {
                     this.closest('.carrinho-item').remove();
                     console.log(`Remover item ${itemId} do carrinho`);
+                    // Aqui você faria uma requisição AJAX para remover
                 }
             });
         });
 
-        document.querySelectorAll('.remove-favorito').forEach(btn => {
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const livroId = this.getAttribute('data-livro');
-                if (confirm('Tem certeza que deseja remover dos favoritos?')) {
-                    this.closest('.card').remove();
+                const icon = this.querySelector('i');
+                const countSpan = this.querySelector('.favorite-count');
+                
+                if (this.classList.contains('active')) {
+                    // Remover dos favoritos
+                    this.classList.remove('active');
+                    icon.classList.replace('fas', 'far');
+                    let count = parseInt(countSpan.textContent) - 1;
+                    countSpan.textContent = count;
                     console.log(`Remover livro ${livroId} dos favoritos`);
                 }
+                // Aqui você faria uma requisição AJAX
             });
         });
 
         function openBookModal(livroId) {
-            alert(`Abrindo detalhes do livro ID: ${livroId}`);
+            // Em implementação real, buscaria dados via AJAX
+            const modalContent = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-book" style="font-size: 4rem; color: var(--primary-main); margin-bottom: 1rem;"></i>
+                    <h4>Detalhes do Livro</h4>
+                    <p>ID do livro: ${livroId}</p>
+                    
+                    <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                        <h4>Avaliações e Comentários</h4>
+                        
+                        <?php if(isset($_SESSION['usuario_id'])): ?>
+                        <div class="form-group">
+                            <label class="form-label">Sua Avaliação</label>
+                            <div class="star-rating">
+                                <?php for($i = 1; $i <= 5; $i++): ?>
+                                    <span class="star" data-rating="<?= $i ?>">⭐</span>
+                                <?php endfor; ?>
+                            </div>
+                            <textarea class="form-control" placeholder="Deixe seu comentário..." rows="3"></textarea>
+                            <button class="btn btn-primary mt-2">Enviar Avaliação</button>
+                        </div>
+                        <?php else: ?>
+                            <p>Faça login para comentar e avaliar</p>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary">Adicionar ao Carrinho</button>
+                        <button class="btn btn-outline" onclick="closeBookModal()">Fechar</button>
+                    </div>
+                </div>
+            `;
+            
+            // Criar modal dinâmico
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Detalhes do Livro</h3>
+                        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${modalContent}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Sistema de estrelas
+            modal.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    modal.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                    for (let i = 0; i < rating; i++) {
+                        modal.querySelectorAll('.star')[i].classList.add('active');
+                    }
+                    console.log(`Avaliação: ${rating} estrelas`);
+                });
+            });
         }
 
         document.querySelector('.mobile-menu-btn')?.addEventListener('click', function() {

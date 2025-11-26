@@ -11,9 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_livro = $_POST['id_livro'];
         $data_entrega_prevista = $_POST['data_entrega_prevista'];
         
-        $stmt = $pdo->prepare("INSERT INTO EMPRESTIMO (id_usuario, id_livro, data_entrega_prevista) VALUES (?, ?, ?)");
+        // Verificar se é estudante para desconto
+        $stmt_estudante = $pdo->prepare("SELECT etec_estudante FROM USUARIO WHERE id_usuario = ?");
+        $stmt_estudante->execute([$id_usuario]);
+        $eh_estudante = $stmt_estudante->fetchColumn();
+        
+        $stmt = $pdo->prepare("INSERT INTO EMPRESTIMO (id_usuario, id_livro, data_emprestimo, data_entrega_prevista) VALUES (?, ?, NOW(), ?)");
         if ($stmt->execute([$id_usuario, $id_livro, $data_entrega_prevista])) {
-            $_SESSION['sucesso'] = "Empréstimo realizado com sucesso!";
+            if ($eh_estudante) {
+                $_SESSION['sucesso'] = "Empréstimo realizado com sucesso! 🎓 Estudante ETEC - Empréstimo gratuito!";
+            } else {
+                $_SESSION['sucesso'] = "Empréstimo realizado com sucesso!";
+            }
         } else {
             $_SESSION['erro'] = "Erro ao realizar empréstimo!";
         }
@@ -22,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['registrar_devolucao'])) {
         $id_emprestimo = $_POST['id_emprestimo'];
         
-        // Aqui você poderia atualizar a data_devolucao_real
         $stmt = $pdo->prepare("UPDATE EMPRESTIMO SET data_devolucao_real = NOW() WHERE id_emprestimo = ?");
         if ($stmt->execute([$id_emprestimo])) {
             $_SESSION['sucesso'] = "Devolução registrada com sucesso!";
@@ -37,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Buscar empréstimos
 $emprestimos = $pdo->query("
-    SELECT e.*, u.nome as usuario_nome, l.titulo as livro_titulo 
+    SELECT e.*, u.nome as usuario_nome, u.etec_estudante, l.titulo as livro_titulo 
     FROM EMPRESTIMO e 
     JOIN USUARIO u ON e.id_usuario = u.id_usuario 
     JOIN LIVROS l ON e.id_livro = l.id_livro 
@@ -45,7 +53,7 @@ $emprestimos = $pdo->query("
 ")->fetchAll();
 
 // Buscar usuários e livros para o formulário
-$usuarios = $pdo->query("SELECT id_usuario, nome FROM USUARIO WHERE tipo = 'usuario' ORDER BY nome")->fetchAll();
+$usuarios = $pdo->query("SELECT id_usuario, nome, etec_estudante FROM USUARIO WHERE tipo = 'usuario' ORDER BY nome")->fetchAll();
 $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fetchAll();
 ?>
 
@@ -137,6 +145,16 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
         .btn-success:hover {
             background: #2e7d32;
         }
+
+        .estudante-badge {
+            background: var(--primary-main);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -167,7 +185,12 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
                         <select name="id_usuario" class="form-control" required>
                             <option value="">Selecione um usuário</option>
                             <?php foreach($usuarios as $usuario): ?>
-                                <option value="<?= $usuario['id_usuario'] ?>"><?= htmlspecialchars($usuario['nome']) ?></option>
+                                <option value="<?= $usuario['id_usuario'] ?>">
+                                    <?= htmlspecialchars($usuario['nome']) ?>
+                                    <?php if($usuario['etec_estudante']): ?>
+                                        🎓 Estudante
+                                    <?php endif; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -187,6 +210,11 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
                         <input type="date" name="data_entrega_prevista" class="form-control" required
                                min="<?= date('Y-m-d') ?>">
                     </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Estudantes da ETEC:</strong> Empréstimos gratuitos! 🎓
                 </div>
                 
                 <button type="submit" class="btn btn-primary">
@@ -220,7 +248,7 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
                     <tbody>
                         <?php foreach($emprestimos as $emp): 
                             $status = 'ativo';
-                            if ($emp['data_devolucao_real']) {
+                            if (isset($emp['data_devolucao_real']) && $emp['data_devolucao_real']) {
                                 $status = 'devolvido';
                             } elseif (strtotime($emp['data_entrega_prevista']) < time()) {
                                 $status = 'atrasado';
@@ -228,7 +256,12 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
                         ?>
                         <tr>
                             <td><?= $emp['id_emprestimo'] ?></td>
-                            <td><strong><?= htmlspecialchars($emp['usuario_nome']) ?></strong></td>
+                            <td>
+                                <strong><?= htmlspecialchars($emp['usuario_nome']) ?></strong>
+                                <?php if($emp['etec_estudante']): ?>
+                                    <span class="estudante-badge">🎓 ETEC</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?= htmlspecialchars($emp['livro_titulo']) ?></td>
                             <td><?= date('d/m/Y', strtotime($emp['data_emprestimo'])) ?></td>
                             <td><?= date('d/m/Y', strtotime($emp['data_entrega_prevista'])) ?></td>
@@ -273,6 +306,19 @@ $livros = $pdo->query("SELECT id_livro, titulo FROM LIVROS ORDER BY titulo")->fe
             const hoje = new Date().toISOString().split('T')[0];
             dataInput.min = hoje;
         }
+
+        // Validação do formulário
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const usuario = document.querySelector('select[name="id_usuario"]').value;
+            const livro = document.querySelector('select[name="id_livro"]').value;
+            const data = document.querySelector('input[name="data_entrega_prevista"]').value;
+            
+            if (!usuario || !livro || !data) {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return false;
+            }
+        });
     </script>
 </body>
 </html>

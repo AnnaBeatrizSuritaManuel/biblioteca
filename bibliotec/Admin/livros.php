@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ano_publicado = $_POST['ano_publicado'];
         $editora = trim($_POST['editora']);
         $numero_paginas = $_POST['numero_paginas'];
+        $id_autor = $_POST['id_autor'];
         
         // Processar upload da imagem
         $imagem_url = null;
@@ -22,6 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $stmt = $pdo->prepare("INSERT INTO LIVROS (titulo, autor, genero, ano_publicado, editora, numero_paginas, imagem_url) VALUES (?, ?, ?, ?, ?, ?, ?)");
         if ($stmt->execute([$titulo, $autor, $genero, $ano_publicado, $editora, $numero_paginas, $imagem_url])) {
+            $id_livro = $pdo->lastInsertId();
+            
+            // Conectar autor ao livro
+            if ($id_autor) {
+                $stmt_rel = $pdo->prepare("INSERT INTO ESCRITO (id_livro, id_autor) VALUES (?, ?)");
+                $stmt_rel->execute([$id_livro, $id_autor]);
+            }
+            
             $_SESSION['sucesso'] = "Livro cadastrado com sucesso!";
         } else {
             $_SESSION['erro'] = "Erro ao cadastrar livro!";
@@ -94,6 +103,9 @@ function uploadImagem($arquivo) {
 
 // Buscar todos os livros
 $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
+
+// Buscar autores para o select
+$autores = $pdo->query("SELECT * FROM AUTORES ORDER BY nome")->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -210,6 +222,12 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
         .btn-danger:hover {
             background: #c53030;
         }
+
+        .autor-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +298,18 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
                     </div>
                 </div>
 
+                <!-- Seleção de Autor -->
+                <div class="form-group">
+                    <label class="form-label">Vincular a Autor Existente</label>
+                    <select name="id_autor" class="form-control">
+                        <option value="">Selecione um autor (opcional)</option>
+                        <?php foreach($autores as $autor): ?>
+                            <option value="<?= $autor['id_autor'] ?>"><?= htmlspecialchars($autor['nome']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small class="text-muted">Conecte este livro a um autor já cadastrado</small>
+                </div>
+
                 <!-- Upload de Imagem -->
                 <div class="form-group">
                     <label class="form-label">Capa do Livro</label>
@@ -322,7 +352,17 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($livros as $livro): ?>
+                        <?php foreach($livros as $livro): 
+                            // Buscar autor vinculado
+                            $stmt_autor = $pdo->prepare("
+                                SELECT a.nome 
+                                FROM AUTORES a 
+                                JOIN ESCRITO e ON a.id_autor = e.id_autor 
+                                WHERE e.id_livro = ?
+                            ");
+                            $stmt_autor->execute([$livro['id_livro']]);
+                            $autor_vinculado = $stmt_autor->fetch();
+                        ?>
                         <tr>
                             <td>
                                 <?php if($livro['imagem_url']): ?>
@@ -333,7 +373,14 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
                                     </div>
                                 <?php endif; ?>
                             </td>
-                            <td><strong><?= htmlspecialchars($livro['titulo']) ?></strong></td>
+                            <td>
+                                <strong><?= htmlspecialchars($livro['titulo']) ?></strong>
+                                <?php if($autor_vinculado): ?>
+                                    <div class="autor-info">
+                                        📚 Vinculado a: <?= htmlspecialchars($autor_vinculado['nome']) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
                             <td><?= htmlspecialchars($livro['autor']) ?></td>
                             <td>
                                 <span class="badge badge-primary"><?= htmlspecialchars($livro['genero']) ?></span>
@@ -345,7 +392,7 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
                                 </button>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="excluir_livro" value="1">
-                                    <input type="                                    <input type="hidden" name="id_livro" value="<?= $livro['id_livro'] ?>">
+                                    <input type="hidden" name="id_livro" value="<?= $livro['id_livro'] ?>">
                                     <button type="submit" class="btn btn-small btn-danger" 
                                             onclick="return confirm('Tem certeza que deseja excluir este livro?')">
                                         <i class="fas fa-trash"></i>
@@ -368,10 +415,41 @@ $livros = $pdo->query("SELECT * FROM LIVROS ORDER BY titulo")->fetchAll();
         const imagemInput = document.getElementById('imagemInput');
         const previewImagem = document.getElementById('previewImagem');
 
-        // Clique na área de upload
-        uploadArea.addEventListener('click', () => {
-            imagemInput.click();
-        });
+function uploadImagem($arquivo) {
+    $pasta_upload = '../assets/img/livros/'; // Mudei o caminho
+    
+    // Criar pasta se não existir
+    if (!is_dir($pasta_upload)) {
+        mkdir($pasta_upload, 0777, true);
+    }
+    
+    // Validar tipo de arquivo
+    $tipos_permitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    $tipo_arquivo = mime_content_type($arquivo['tmp_name']);
+    
+    if (!in_array($tipo_arquivo, $tipos_permitidos)) {
+        $_SESSION['erro'] = "Tipo de arquivo não permitido. Use JPG, PNG, GIF ou WEBP.";
+        return null;
+    }
+    
+    // Validar tamanho (máximo 2MB)
+    if ($arquivo['size'] > 2 * 1024 * 1024) {
+        $_SESSION['erro'] = "Arquivo muito grande. Tamanho máximo: 2MB.";
+        return null;
+    }
+    
+    // Gerar nome único para o arquivo
+    $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
+    $nome_arquivo = uniqid() . '_' . time() . '.' . $extensao;
+    $caminho_completo = $pasta_upload . $nome_arquivo;
+    
+    // Mover arquivo
+    if (move_uploaded_file($arquivo['tmp_name'], $caminho_completo)) {
+        return 'assets/img/livros/' . $nome_arquivo; // Mudei para caminho relativo
+    }
+    
+    return null;
+}
 
         // Alteração no input de arquivo
         imagemInput.addEventListener('change', function(e) {

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/functions.php'; // Adicione esta linha
 
 $livros_destaque = $pdo->query("
     SELECT * FROM LIVROS 
@@ -9,6 +10,35 @@ $livros_destaque = $pdo->query("
 ")->fetchAll();
 ?>
 
+<!-- No loop dos livros, substitua por: -->
+<div class="grid grid-3">
+    <?php foreach($livros_destaque as $livro): ?>
+    <div class="card">
+        <img src="<?= getImagemLivro($livro['imagem_url']) ?>" 
+             alt="<?= htmlspecialchars($livro['titulo']) ?>" 
+             class="card-img"
+             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+'">
+        <div class="card-body">
+            <h3 class="card-title"><?= htmlspecialchars($livro['titulo']) ?></h3>
+            <p class="card-text"><?= htmlspecialchars($livro['autor']) ?></p>
+            <p class="card-text">
+                <span class="badge badge-primary"><?= htmlspecialchars($livro['genero']) ?></span>
+                <small>• <?= $livro['ano_publicado'] ?></small>
+            </p>
+            <div class="card-actions">
+                <button class="btn btn-primary btn-small" onclick="openBookModal(<?= $livro['id_livro'] ?>)">
+                    Ver Detalhes
+                </button>
+                <?php if(isset($_SESSION['usuario_id'])): ?>
+                    <button class="btn btn-outline btn-small favorite-btn" data-livro="<?= $livro['id_livro'] ?>">
+                        <i class="far fa-heart"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

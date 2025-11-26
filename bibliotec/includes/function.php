@@ -340,4 +340,20 @@ function logAtividade($usuario_id, $acao, $detalhes = '') {
         return false;
     }
 }
+
+function getImagemLivro($imagem_url) {
+    if (!$imagem_url) {
+        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhjZTEzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzJjMzgxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8+PGtici8Pjx0c3BhbiB4PSI1MCUiIHk9IjUwJSI+8J+SuiBCb29rPC90c3Bhbj48L3RleHQ+PC9zdmc+';
+    }
+    
+    if (strpos($imagem_url, 'http') === 0) {
+        return $imagem_url;
+    }
+    
+    if (strpos($imagem_url, '/') === 0) {
+        return substr($imagem_url, 1);
+    }
+    
+    return $imagem_url;
+}
 ?>

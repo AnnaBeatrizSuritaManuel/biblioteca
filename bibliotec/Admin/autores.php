@@ -20,6 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Editar autor
+    if (isset($_POST['editar_autor'])) {
+        $id_autor = $_POST['id_autor'];
+        $nome = trim($_POST['nome']);
+        $nacionalidade = trim($_POST['nacionalidade']);
+        $biografia = trim($_POST['biografia']);
+        $data_nascimento = $_POST['data_nascimento'] ?: null;
+        
+        $stmt = $pdo->prepare("UPDATE AUTORES SET nome = ?, nacionalidade = ?, biografia = ?, data_nascimento = ? WHERE id_autor = ?");
+        if ($stmt->execute([$nome, $nacionalidade, $biografia, $data_nascimento, $id_autor])) {
+            $_SESSION['sucesso'] = "Autor atualizado com sucesso!";
+        } else {
+            $_SESSION['erro'] = "Erro ao atualizar autor!";
+        }
+    }
+    
     if (isset($_POST['excluir_autor'])) {
         $id_autor = $_POST['id_autor'];
         $stmt = $pdo->prepare("DELETE FROM AUTORES WHERE id_autor = ?");
@@ -152,6 +168,12 @@ $autores_com_livros = $pdo->query("
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .biografia-completa {
+            max-width: 500px;
+            white-space: normal;
         }
 
         .nacionalidade-badge {
@@ -221,7 +243,7 @@ $autores_com_livros = $pdo->query("
                     
                     <div class="form-group">
                         <label class="form-label">Biografia</label>
-                        <textarea name="biografia" class="form-control" rows="3" placeholder="Breve biografia do autor..."></textarea>
+                        <textarea name="biografia" class="form-control" rows="4" placeholder="Breve biografia do autor..."></textarea>
                     </div>
                 </div>
                 
@@ -276,7 +298,9 @@ $autores_com_livros = $pdo->query("
                             </td>
                             <td><?= $data_nascimento ?></td>
                             <td>
-                                <div class="biografia-truncada" title="<?= htmlspecialchars($autor['biografia'] ?? '') ?>">
+                                <div class="biografia-truncada" 
+                                     data-biografia="<?= htmlspecialchars($autor['biografia'] ?? '') ?>"
+                                     onclick="toggleBiografia(this)">
                                     <?= $autor['biografia'] ? htmlspecialchars(substr($autor['biografia'], 0, 50)) . '...' : '-' ?>
                                 </div>
                             </td>
@@ -303,13 +327,97 @@ $autores_com_livros = $pdo->query("
     
     <?php include '../includes/footer.php'; ?>
 
+    <!-- Modal de Edição de Autor -->
+    <div id="editAutorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Autor</h3>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editAutorForm" method="POST">
+                    <input type="hidden" name="editar_autor" value="1">
+                    <input type="hidden" name="id_autor" id="edit_id_autor">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nome *</label>
+                        <input type="text" name="nome" id="edit_nome" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nacionalidade</label>
+                        <input type="text" name="nacionalidade" id="edit_nacionalidade" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Data de Nascimento</label>
+                        <input type="date" name="data_nascimento" id="edit_data_nascimento" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Biografia</label>
+                        <textarea name="biografia" id="edit_biografia" class="form-control" rows="6" 
+                                  placeholder="Descreva a biografia do autor..."></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function editarAutor(autorId) {
-            alert(`Funcionalidade de edição para o autor ID: ${autorId}\nEm uma implementação completa, aqui abriria um modal de edição.`);
+        function toggleBiografia(element) {
+            const biografiaCompleta = element.getAttribute('data-biografia');
+            if (element.classList.contains('biografia-completa')) {
+                element.classList.remove('biografia-completa');
+                element.classList.add('biografia-truncada');
+                element.textContent = biografiaCompleta ? biografiaCompleta.substring(0, 50) + '...' : '-';
+            } else {
+                element.classList.remove('biografia-truncada');
+                element.classList.add('biografia-completa');
+                element.textContent = biografiaCompleta || '-';
+            }
         }
 
-        // Validação do formulário
-        document.querySelector('form').addEventListener('submit', function(e) {
+        async function editarAutor(autorId) {
+            try {
+                const response = await fetch(`get_autor.php?id=${autorId}`);
+                const autor = await response.json();
+                
+                document.getElementById('edit_id_autor').value = autor.id_autor;
+                document.getElementById('edit_nome').value = autor.nome;
+                document.getElementById('edit_nacionalidade').value = autor.nacionalidade || '';
+                document.getElementById('edit_data_nascimento').value = autor.data_nascimento || '';
+                document.getElementById('edit_biografia').value = autor.biografia || '';
+                
+                document.getElementById('editAutorModal').classList.add('active');
+            } catch (error) {
+                console.error('Erro ao carregar autor:', error);
+                alert('Erro ao carregar dados do autor');
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editAutorModal').classList.remove('active');
+        }
+
+        // Validação do formulário de edição
+        document.getElementById('editAutorForm').addEventListener('submit', function(e) {
+            const nome = document.getElementById('edit_nome').value.trim();
+            
+            if (!nome) {
+                e.preventDefault();
+                alert('Por favor, preencha pelo menos o nome do autor.');
+                return false;
+            }
+        });
+
+        // Validação do formulário de cadastro
+        document.querySelector('form[action=""]').addEventListener('submit', function(e) {
             const nome = document.querySelector('input[name="nome"]').value.trim();
             
             if (!nome) {
@@ -322,10 +430,12 @@ $autores_com_livros = $pdo->query("
         // Mostrar biografia completa ao passar o mouse
         document.querySelectorAll('.biografia-truncada').forEach(element => {
             element.addEventListener('mouseenter', function() {
-                const fullText = this.getAttribute('title');
+                const fullText = this.getAttribute('data-biografia');
                 if (fullText && fullText !== '-') {
                     this.setAttribute('data-original-text', this.textContent);
                     this.textContent = fullText;
+                    this.classList.add('biografia-completa');
+                    this.classList.remove('biografia-truncada');
                 }
             });
             
@@ -333,8 +443,17 @@ $autores_com_livros = $pdo->query("
                 const originalText = this.getAttribute('data-original-text');
                 if (originalText) {
                     this.textContent = originalText;
+                    this.classList.remove('biografia-completa');
+                    this.classList.add('biografia-truncada');
                 }
             });
+        });
+
+        // Fechar modal ao clicar fora
+        document.getElementById('editAutorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
         });
     </script>
 </body>
