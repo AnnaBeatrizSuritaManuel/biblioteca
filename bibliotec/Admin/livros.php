@@ -64,9 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Função para upload de imagem
 function uploadImagem($arquivo) {
-    $pasta_upload = '../img/livros/';
+    $pasta_upload = '../assets/img/livros/';
     
     // Criar pasta se não existir
     if (!is_dir($pasta_upload)) {
@@ -78,7 +77,7 @@ function uploadImagem($arquivo) {
     $tipo_arquivo = mime_content_type($arquivo['tmp_name']);
     
     if (!in_array($tipo_arquivo, $tipos_permitidos)) {
-        $_SESSION['erro'] = "Tipo de arquivo não permitido. Use JPG, PNG ou GIF.";
+        $_SESSION['erro'] = "Tipo de arquivo não permitido. Use JPG, PNG, GIF ou WEBP.";
         return null;
     }
     
@@ -95,7 +94,7 @@ function uploadImagem($arquivo) {
     
     // Mover arquivo
     if (move_uploaded_file($arquivo['tmp_name'], $caminho_completo)) {
-        return '/biblioteca/img/livros/' . $nome_arquivo;
+        return 'assets/img/livros/' . $nome_arquivo; // Caminho relativo
     }
     
     return null;

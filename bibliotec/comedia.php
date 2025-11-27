@@ -1,7 +1,9 @@
 <?php
 session_start();
 include 'includes/conexao.php';
-include 'includes/functions.php'; // Adicione esta linha
+
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'comedia';
 
 // Buscar livros da categoria
 $livros_categoria = $pdo->prepare("
@@ -12,7 +14,6 @@ $livros_categoria = $pdo->prepare("
 $livros_categoria->execute(["%$genero%"]);
 $livros = $livros_categoria->fetchAll();
 ?>
-
 <!-- No loop, use: -->
 <div class="grid grid-3">
     <?php foreach($livros as $livro): ?>

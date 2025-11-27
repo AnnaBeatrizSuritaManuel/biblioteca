@@ -1,15 +1,19 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/function.php';
 
-// Buscar livros de drama do banco
-$livros_drama = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'drama'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%drama%' OR genero LIKE '%Drama%' OR genero LIKE '%trágico%' OR genero LIKE '%emoção%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_drama->execute();
-$livros = $livros_drama->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
 
 <!DOCTYPE html>

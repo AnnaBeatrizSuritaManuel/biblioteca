@@ -1,15 +1,19 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/function.php';
 
-// Buscar livros de terror do banco
-$livros_terror = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'terror'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%terror%' OR genero LIKE '%Terror%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_terror->execute();
-$livros = $livros_terror->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
 
 <!DOCTYPE html>

@@ -423,3 +423,44 @@
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-main);
 }
+/* ===== LOADING SPINNER ===== */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(74, 124, 89, 0.2);
+    border-left: 4px solid var(--primary-main);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== ERROR STATES ===== */
+.error-message {
+    color: var(--error);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-control.error {
+    border-color: var(--error);
+}
+
+/* ===== CHARACTER COUNTER ===== */
+.char-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.char-counter.warning {
+    color: var(--warning);
+}
+
+.char-counter.error {
+    color: var(--error);
+}

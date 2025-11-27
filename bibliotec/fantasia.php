@@ -1,15 +1,19 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/function.php';    
 
-// Buscar livros de fantasia do banco
-$livros_fantasia = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'fantasia'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%fantasia%' OR genero LIKE '%Fantasia%' OR genero LIKE '%épico%' OR genero LIKE '%Épico%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_fantasia->execute();
-$livros = $livros_fantasia->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
 
 <!DOCTYPE html>

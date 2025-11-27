@@ -1,3 +1,4 @@
+<!-- ADICIONAR no início do header.php: -->
 <?php
 $pagina_atual = basename($_SERVER['PHP_SELF']);
 $eh_pagina_admin = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;

@@ -2,14 +2,17 @@
 session_start();
 include 'includes/conexao.php';
 
-// Buscar livros de ficção científica do banco
-$livros_ficcao = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'ficcao'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%ficção científica%' OR genero LIKE '%ficcao cientifica%' OR genero LIKE '%ficção%' OR genero LIKE '%ciência%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_ficcao->execute();
-$livros = $livros_ficcao->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
 
 <!DOCTYPE html>

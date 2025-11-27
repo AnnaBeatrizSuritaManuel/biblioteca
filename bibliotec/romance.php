@@ -1,17 +1,20 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/function.php'; // Adicione esta linha
 
-// Buscar livros de romance do banco
-$livros_romance = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'romance'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%romance%' OR genero LIKE '%Romance%' OR genero LIKE '%amor%' OR genero LIKE '%Amor%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_romance->execute();
-$livros = $livros_romance->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

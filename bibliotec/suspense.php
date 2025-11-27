@@ -1,17 +1,20 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+include 'includes/function.php';
 
-// Buscar livros de suspense do banco
-$livros_suspense = $pdo->prepare("
+// DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
+$genero = 'suspense'; // Ex: 'Terror', 'Romance', etc
+
+// Buscar livros da categoria
+$livros_categoria = $pdo->prepare("
     SELECT * FROM LIVROS 
-    WHERE genero LIKE '%suspense%' OR genero LIKE '%Suspense%' OR genero LIKE '%mistério%' OR genero LIKE '%Mistério%'
+    WHERE genero LIKE ?
     ORDER BY titulo
 ");
-$livros_suspense->execute();
-$livros = $livros_suspense->fetchAll();
+$livros_categoria->execute(["%$genero%"]);
+$livros = $livros_categoria->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
