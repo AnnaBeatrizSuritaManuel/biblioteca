@@ -258,8 +258,8 @@ $autores = $pdo->query("SELECT * FROM AUTORES ORDER BY nome")->fetchAll();
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Autor *</label>
-                        <input type="text" name="autor" class="form-control" required>
+                        <label class="form-label">Editora *</label>
+                        <input type="text" name="editora" class="form-control" required>
                     </div>
                 </div>
                 
