@@ -42,7 +42,7 @@
     <script src="<?= $eh_pagina_admin ? '../' : '' ?>assets/js/script.js"></script>
     
     <script>
-        // Menu mobile - corrigido para funcionar em admin também
+        // Menu mobile 
         document.querySelector('.mobile-menu-btn')?.addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
             if (navLinks.style.display === 'flex') {

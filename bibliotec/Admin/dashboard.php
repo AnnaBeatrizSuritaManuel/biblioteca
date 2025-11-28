@@ -10,7 +10,7 @@ $total_usuarios = $pdo->query("SELECT COUNT(*) FROM USUARIO WHERE tipo = 'usuari
 $total_emprestimos = $pdo->query("SELECT COUNT(*) FROM EMPRESTIMO")->fetchColumn();
 $total_autores = $pdo->query("SELECT COUNT(*) FROM AUTORES")->fetchColumn();
 
-// Livros mais populares (exemplo)
+// Livros mais populares 
 $livros_populares = $pdo->query("
     SELECT l.*, COUNT(e.id_emprestimo) as total_emprestimos 
     FROM LIVROS l 

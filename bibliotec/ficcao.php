@@ -3,7 +3,7 @@ session_start();
 include 'includes/conexao.php';
 
 // DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
-$genero = 'ficcao'; // Ex: 'Terror', 'Romance', etc
+$genero = 'ficcao'; 
 
 // Buscar livros da categoria
 $livros_categoria = $pdo->prepare("

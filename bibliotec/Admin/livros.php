@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $livro = $stmt_img->fetch();
         
         if ($livro && $livro['imagem_url']) {
-            $caminho_imagem = $_SERVER['DOCUMENT_ROOT'] . $livro['imagem_url'];
+            $caminho_imagem = $_SERVER['DOCUMENT_ROOT'] . '/' . ltrim($livro['imagem_url'], '/');
             if (file_exists($caminho_imagem)) {
                 unlink($caminho_imagem);
             }
@@ -94,7 +94,7 @@ function uploadImagem($arquivo) {
     
     // Mover arquivo
     if (move_uploaded_file($arquivo['tmp_name'], $caminho_completo)) {
-        return 'assets/img/livros/' . $nome_arquivo; // Caminho relativo
+        return '/assets/img/livros/' . $nome_arquivo;
     }
     
     return null;
@@ -365,7 +365,7 @@ $autores = $pdo->query("SELECT * FROM AUTORES ORDER BY nome")->fetchAll();
                         <tr>
                             <td>
                                 <?php if($livro['imagem_url']): ?>
-                                    <img src="..<?= $livro['imagem_url'] ?>" alt="<?= htmlspecialchars($livro['titulo']) ?>" class="livro-imagem">
+                                    <img src="<?= $livro['imagem_url'] ?>" alt="<?= htmlspecialchars($livro['titulo']) ?>" class="livro-imagem">
                                 <?php else: ?>
                                     <div class="sem-imagem">
                                         Sem<br>Imagem
@@ -414,41 +414,10 @@ $autores = $pdo->query("SELECT * FROM AUTORES ORDER BY nome")->fetchAll();
         const imagemInput = document.getElementById('imagemInput');
         const previewImagem = document.getElementById('previewImagem');
 
-function uploadImagem($arquivo) {
-    $pasta_upload = '../assets/img/livros/'; // Mudei o caminho
-    
-    // Criar pasta se não existir
-    if (!is_dir($pasta_upload)) {
-        mkdir($pasta_upload, 0777, true);
-    }
-    
-    // Validar tipo de arquivo
-    $tipos_permitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    $tipo_arquivo = mime_content_type($arquivo['tmp_name']);
-    
-    if (!in_array($tipo_arquivo, $tipos_permitidos)) {
-        $_SESSION['erro'] = "Tipo de arquivo não permitido. Use JPG, PNG, GIF ou WEBP.";
-        return null;
-    }
-    
-    // Validar tamanho (máximo 2MB)
-    if ($arquivo['size'] > 2 * 1024 * 1024) {
-        $_SESSION['erro'] = "Arquivo muito grande. Tamanho máximo: 2MB.";
-        return null;
-    }
-    
-    // Gerar nome único para o arquivo
-    $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
-    $nome_arquivo = uniqid() . '_' . time() . '.' . $extensao;
-    $caminho_completo = $pasta_upload . $nome_arquivo;
-    
-    // Mover arquivo
-    if (move_uploaded_file($arquivo['tmp_name'], $caminho_completo)) {
-        return 'assets/img/livros/' . $nome_arquivo; // Mudei para caminho relativo
-    }
-    
-    return null;
-}
+        // Clique na área de upload
+        uploadArea.addEventListener('click', () => {
+            imagemInput.click();
+        });
 
         // Alteração no input de arquivo
         imagemInput.addEventListener('change', function(e) {

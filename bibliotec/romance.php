@@ -1,10 +1,10 @@
 <?php
 session_start();
 include 'includes/conexao.php';
-include 'includes/function.php'; // Adicione esta linha
+include 'includes/function.php'; 
 
 // DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
-$genero = 'romance'; // Ex: 'Terror', 'Romance', etc
+$genero = 'romance'; 
 
 // Buscar livros da categoria
 $livros_categoria = $pdo->prepare("
