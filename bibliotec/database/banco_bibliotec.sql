@@ -143,6 +143,39 @@ CREATE TABLE `livros` (
 --
 
 INSERT INTO `livros` (`id_livro`, `titulo`, `autor`, `genero`, `ano_publicado`, `editora`, `numero_paginas`, `imagem_url`) VALUES
+(1, 'A Cor que Caiu do Espaço', 'H.P Lovecraft', 'Horror Cósmico', 1927, 'Editora Arkham', 150, 'url_imagem1.jpg'),
+(2, 'O Chamado de Cthulhu', 'H.P Lovecraft', 'Horror Cósmico', 1928, 'Editora Miskatonic', 120, 'url_imagem2.jpg');
+-- Inserindo livros de FANTASIA
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('O Senhor dos Anéis: A Sociedade do Anel', 'J.R.R. Tolkien', 'fantasia', 1954, 'Martins Fontes', 423);
+
+-- Inserindo livros de TERROR
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('It: A Coisa', 'Stephen King', 'terror', 1986, 'Suma', 1104);
+
+-- Inserindo livros de COMÉDIA
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('O Guia do Mochileiro das Galáxias', 'Douglas Adams', 'comedia', 1979, 'Arqueiro', 208);
+
+-- Inserindo livros de SUSPENSE
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('O Silêncio dos Inocentes', 'Thomas Harris', 'suspence', 1988, 'Record', 367);
+
+-- Inserindo livros de ROMANCE
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('Orgulho e Preconceito', 'Jane Austen', 'romance', 1813, 'Martin Claret', 424);
+
+-- Inserindo livros de FICÇÃO CIENTÍFICA
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('Duna', 'Frank Herbert', 'ficcao', 1965, 'Aleph', 680);
+
+-- Inserindo livros de DRAMA
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('O Sol é para Todos', 'Harper Lee', 'drama', 1960, 'José Olympio', 349);
+
+-- Inserindo livros de AVENTURA
+INSERT INTO livros (titulo, autor, genero, ano_publicado, editora, numero_paginas) VALUES
+('A Ilha do Tesouro', 'Robert Louis Stevenson', 'aventura', 1883, 'Penguin', 304);
 
 -- --------------------------------------------------------
 
