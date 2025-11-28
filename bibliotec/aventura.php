@@ -1,10 +1,10 @@
 <?php
 session_start();
 include 'includes/conexao.php';
-include 'includes/function.php'; // Mantém funções utilitárias se houver
+include 'includes/function.php'; -
 
 // DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
-$genero = 'aventura'; // Ex: 'Terror', 'Romance', etc
+$genero = 'aventura'; 
 
 // Buscar livros da categoria
 $livros_categoria = $pdo->prepare("
@@ -48,7 +48,6 @@ $livros = $livros_categoria->fetchAll();
                 <div class="grid grid-3">
                     <?php foreach($livros as $livro): ?>
                         <div class="card">
-                            <!-- Imagem: use APENAS a URL salva em imagem_url e o onerror com o placeholder base64 -->
                             <img src="<?= $livro['imagem_url'] ?>" 
                                  alt="<?= htmlspecialchars($livro['titulo']) ?>" 
                                  class="card-img"

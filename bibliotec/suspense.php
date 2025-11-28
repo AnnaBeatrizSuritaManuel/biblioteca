@@ -4,7 +4,7 @@ include 'includes/conexao.php';
 include 'includes/function.php';
 
 // DEFINIR O GÊNERO - ALTERAR PARA CADA CATEGORIA
-$genero = 'suspense'; // Ex: 'Terror', 'Romance', etc
+$genero = 'suspense'; 
 
 // Buscar livros da categoria
 $livros_categoria = $pdo->prepare("

@@ -1,9 +1,7 @@
 <?php
 session_start();
 include 'includes/conexao.php';
-// REMOVER: include 'includes/function.php'; // Não é necessário aqui
 
-// Este arquivo só mostra as categorias, não precisa buscar livros
 ?>
 
 <!DOCTYPE html>
