@@ -1,0 +1,31 @@
+AdaptiveMove - Plataforma de Fitness Adaptativo
+
+Academias Reais em São Paulo:
+
+1. Smartfit Paulista
+   Endereço: Avenida Paulista, 1000 - Bela Vista, São Paulo - SP
+   Coordenadas: -23.5505, -46.6333
+   Telefone: (11) 3256-8900
+   Horário: 06:00 - 23:00
+   Avaliação: 4.5/5
+
+2. Bio Ritmo Academia - Ibirapuera
+   Endereço: Avenida Ibirapuera, 500 - Vila Mariana, São Paulo - SP
+   Coordenadas: -23.5732, -46.6583
+   Telefone: (11) 5084-1000
+   Horário: 07:00 - 22:00
+   Avaliação: 4.7/5
+
+3. Bodytech Iguatemi
+   Endereço: Avenida Brigadeiro Faria Lima, 1191 - Pinheiros, São Paulo - SP
+   Coordenadas: -23.5612, -46.6712
+   Telefone: (11) 3064-1000
+   Horário: 06:00 - 23:00
+   Avaliação: 4.6/5
+
+4. Ultra Academia Paulista
+   Endereço: Avenida Paulista, 2064 - Bela Vista, São Paulo - SP
+   Coordenadas: -23.5545, -46.6545
+   Telefone: (11) 3287-1000
+   Horário: 06:00 - 22:00
+   Avaliação: 4.8/5
